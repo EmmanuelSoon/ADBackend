@@ -87,3 +87,5 @@ def loadModel(model_path, h5_file):
     loaded_model = model_from_json(loaded_model_json)
     # load weights into new model
     loaded_model.load_weights(h5_file)
+
+    return loaded_model
