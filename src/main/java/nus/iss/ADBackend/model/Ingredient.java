@@ -17,7 +17,23 @@ public class Ingredient {
     private String image;
     @Column(name = "calories/100g")
     private double calorie;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "nutritionId")
     private NutritionRecord nutritionRecord;
+
+    public Ingredient(String name, String image, double calorie, NutritionRecord nutritionRecord) {
+        this.name = name;
+        this.image = image;
+        this.calorie = calorie;
+        this.nutritionRecord = nutritionRecord;
+    }
+
+    public Ingredient(String name, double calorie) {
+        this.name = name;
+        this.calorie = calorie;
+    }
+
+    public Ingredient(String name) {
+        this.name = name;
+    }
 }

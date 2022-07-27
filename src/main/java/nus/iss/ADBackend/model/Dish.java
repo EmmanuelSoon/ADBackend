@@ -34,5 +34,7 @@ public class Dish {
         this.nutritionRecord = nutritionRecord;
     }
 
-
+    public Dish(String name) {
+        this.name = name;
+    }
 }

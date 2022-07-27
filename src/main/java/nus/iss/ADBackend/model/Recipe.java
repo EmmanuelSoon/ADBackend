@@ -7,6 +7,7 @@ import org.springframework.oxm.xstream.XStreamMarshaller;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,6 +26,9 @@ public class Recipe {
     private Dish dish;
     @Column(name = "createdOn")
     private LocalDateTime dateTime;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<WeightedIngredient> ingredientList = new ArrayList<>();
     private String procedures;
 
     public Recipe(String image, User user, Dish dish, LocalDateTime dateTime, String procedures) {
@@ -33,5 +37,13 @@ public class Recipe {
         this.dish = dish;
         this.dateTime = dateTime;
         this.procedures = procedures;
+    }
+
+    public double getTotalCalories() {
+        double total = 0.0;
+        for (WeightedIngredient weightedIngredient : ingredientList) {
+            total += weightedIngredient.getCalorie();
+        }
+        return total;
     }
 }

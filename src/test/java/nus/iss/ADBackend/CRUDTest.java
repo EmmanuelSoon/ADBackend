@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @DataJpaTest
@@ -27,9 +28,11 @@ public class CRUDTest {
 
     @Autowired
     RecipeRepository rRepo;
-
     @Autowired
     CommentRepository cRepo;
+
+    @Autowired
+    private IngredientRepository iRepo;
     public Dish createDishWithNutritionInfo() {
         NutritionRecord n = new NutritionRecord(10.0);
         Dish dish = new Dish("MALA", "path", 100.0, n);
@@ -142,5 +145,50 @@ public class CRUDTest {
         Assertions.assertEquals(0, cRepo.findAllByRecipeId(r1.getId()).size());
         Assertions.assertNull(dRepo.findByName("MALA"));
     }
+
+    private void createIntegredient() {
+        iRepo.saveAndFlush(new Ingredient("apple", 10.0));
+        iRepo.saveAndFlush(new Ingredient("fired-chicken", 20.0));
+    }
+    @Test
+    @Order(5)
+    public void WeightIngredientTest() {
+        dRepo.saveAndFlush(createDishWithNutritionInfo());
+        Dish d = dRepo.findByName("MALA");
+        User u1 = createUserByName("test-staff", Role.NORMAL);
+        LocalDateTime t1 = LocalDateTime.of(2020, 12, 31, 11, 59, 59);
+        Recipe r1 = createRecipeByUserAndDish(u1, d, t1, "11111");
+        createIntegredient();
+        r1.getIngredientList().add(new WeightedIngredient(iRepo.findByName("apple"), 200));
+        r1.getIngredientList().add(new WeightedIngredient(iRepo.findByName("fired-chicken"), 100));
+        rRepo.saveAndFlush(r1);
+        Recipe got = rRepo.findByUserIdAndAndDateTime(u1.getId(), t1);
+        Assertions.assertNotNull(got);
+        System.out.println(got);
+        Assertions.assertEquals(2, got.getIngredientList().size());
+        Assertions.assertEquals(4000.0, got.getTotalCalories());
+        rRepo.deleteById(got.getId());
+        Assertions.assertNull(rRepo.findByUserIdAndAndDateTime(r1.getUser().getId(), r1.getDateTime()));
+    }
+    @Test
+    @Order(6)
+    public void UserTest() {
+        createIntegredient();
+        User u1 = createUserByName("test-staff", Role.NORMAL);
+        Assertions.assertEquals(0, u1.getDislike().size());
+        u1.getDislike().add(iRepo.findByName("apple"));
+        u1.getDislike().add(iRepo.findByName("fired-chicken"));
+        uRepo.saveAndFlush(u1);
+        System.out.println(uRepo.findByName("test-staff"));
+        Assertions.assertEquals(2, uRepo.findByName("test-staff").getDislike().size());
+        u1 = uRepo.findByName("test-staff");
+        u1.getDislike().remove(0);
+        uRepo.saveAndFlush(u1);
+        System.out.println(uRepo.findByName("test-staff"));
+        Assertions.assertEquals(1, uRepo.findByName("test-staff").getDislike().size());
+        uRepo.delete(uRepo.findByName("test-staff"));
+        Assertions.assertNull(uRepo.findByName("test-staff"));
+    }
+
 
 }
