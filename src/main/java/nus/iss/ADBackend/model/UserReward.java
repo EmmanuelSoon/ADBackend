@@ -23,4 +23,11 @@ public class UserReward {
     @JoinColumn(name = "userId")
     private User user;
     private LocalDateTime awardDateTime;
+
+    public UserReward(User user, Reward reward) {
+        super();
+        this.user = user;
+        this.reward = reward;
+        this.awardDateTime = LocalDateTime.now();
+    }
 }
