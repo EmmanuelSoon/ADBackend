@@ -15,11 +15,23 @@ public class HealthRecord {
     private int id;
     @FutureOrPresent
     private LocalDate date;
-    private double weight;
-    private double height;
+    
+    private double userWeight;
+    private double userHeight;
     private double calIntake;
     private double waterIntake;
+    
     @ManyToOne
     @JoinColumn(name = "userId")
     private User user;
+
+    public HealthRecord(User user) {
+        this.user = user;
+        this.date = LocalDate.now();
+    }
+
+    public HealthRecord(User user, LocalDate date) {
+        this.user = user;
+        this.date = date;
+    }
 }

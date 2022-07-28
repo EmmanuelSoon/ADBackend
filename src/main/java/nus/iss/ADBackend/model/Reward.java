@@ -16,4 +16,10 @@ public class Reward {
     private int id;
     private String name;
     private String description;
+
+    public Reward(String name, String description) {
+        super();
+        this.name = name;
+        this.description = description;
+    }
 }

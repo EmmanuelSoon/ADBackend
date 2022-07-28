@@ -26,4 +26,15 @@ public class DietRecord {
     @JoinColumn(name = "userId")
     private User user;
 
+    public DietRecord(User user, String foodName, MealType meal, Double calCount, Double weight) {
+        this.user = user;
+        this.foodName = foodName;
+        this.type = meal;
+        this.calorie = calCount;
+        this.weight = weight;
+
+        this.date = LocalDate.now();
+
+    }
+
 }

@@ -16,11 +16,18 @@ public class UserReward {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "rewardId")
     private Reward reward;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "userId")
     private User user;
     private LocalDateTime awardDateTime;
+
+    public UserReward(User user, Reward reward) {
+        super();
+        this.user = user;
+        this.reward = reward;
+        this.awardDateTime = LocalDateTime.now();
+    }
 }

@@ -23,6 +23,7 @@ public class User {
     private Role role;
     @Enumerated(EnumType.STRING)
     private Goal goal;
+    
     @OneToMany
     private List<Ingredient> dislike = new ArrayList<>();
 
