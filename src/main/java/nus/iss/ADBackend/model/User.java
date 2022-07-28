@@ -24,7 +24,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Goal goal;
     
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany
     private List<Ingredient> dislike = new ArrayList<>();
 
     public User(String name, String username, String password, Role role) {

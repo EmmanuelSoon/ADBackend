@@ -12,13 +12,13 @@ import nus.iss.ADBackend.model.DietRecord;
 
 public interface DietRecordRepository extends JpaRepository<DietRecord, Integer> {
 
-    // DietRecord findById(int id);
+    DietRecord findById(int id);
 
-    // @Query("select fd From FoodDiary fd Where fd.user.id = :userId")
-    // List<DietRecord> findByUserId(@Param("userId") int userId);
+    @Query("select fd From DietRecord fd Where fd.user.id = :userId")
+    List<DietRecord> findByUserId(@Param("userId") int userId);
 
-    // @Transactional
-    // void deleteById(int diaryId);
+    @Transactional
+    void deleteById(int diaryId);
 
 
 }

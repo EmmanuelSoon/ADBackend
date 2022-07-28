@@ -16,10 +16,10 @@ public class UserReward {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "rewardId")
     private Reward reward;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "userId")
     private User user;
     private LocalDateTime awardDateTime;
