@@ -201,7 +201,7 @@ public class UserLogCRUDTest {
 		rRepo.saveAndFlush(logOneWeek);
 		urRepo.saveAndFlush(new UserReward(user1, logOneWeek));
 		urRepo.saveAndFlush(new UserReward(user2, logOneWeek));
-
+		urRepo.deleteByRewardId(logOneWeek.getId());
 		rRepo.deleteById(logOneWeek.getId());
 		List<UserReward> urList = urRepo.findByRewardId(logOneWeek.getId());
 		System.out.println(urList);

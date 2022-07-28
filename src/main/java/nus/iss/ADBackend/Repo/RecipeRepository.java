@@ -1,6 +1,7 @@
 package nus.iss.ADBackend.Repo;
 
 import nus.iss.ADBackend.model.Recipe;
+import nus.iss.ADBackend.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,7 +16,6 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
     public List<Recipe> findAllByUserId(int userId);
     @Query("select r from Recipe r where r.dish.id = ?1")
     public List<Recipe> findAllByDishId(int dishId);
-
     @Modifying
     @Query("delete from Recipe r where r.id = ?1 ")
     public void deleteById(int id);
@@ -25,5 +25,12 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
     @Modifying
     @Query("delete from Recipe r where r.dish.id = ?1 ")
     public void deleteByDishId(int dishId);
+    @Query("select r from Recipe r where r.id = ?1")
+    public Recipe findById(int id);
+/*
+    @Modifying(flushAutomatically = true)
+    @Query("update Recipe r set r.user = ?2 where r.user.id = ?1")
+    public void deprecateRecipes(int userId, User defaultUser);
+*/
 
 }

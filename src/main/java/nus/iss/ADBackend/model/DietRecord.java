@@ -32,9 +32,10 @@ public class DietRecord {
         this.type = meal;
         this.calorie = calCount;
         this.weight = weight;
-
         this.date = LocalDate.now();
-
     }
-
+    public DietRecord(User user) {
+        this.user = user;
+        this.date = LocalDate.now();
+    }
 }

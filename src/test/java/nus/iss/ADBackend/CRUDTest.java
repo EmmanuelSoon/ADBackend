@@ -2,20 +2,23 @@ package nus.iss.ADBackend;
 
 
 import nus.iss.ADBackend.Repo.*;
+import nus.iss.ADBackend.Service.RewardService;
+import nus.iss.ADBackend.Service.UserService;
 import nus.iss.ADBackend.model.*;
-import org.hibernate.type.descriptor.java.LocalDateTimeJavaDescriptor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
+import org.w3c.dom.ls.LSInput;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @DataJpaTest
+@Import({UserService.class, RewardService.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class CRUDTest {
 
@@ -25,14 +28,23 @@ public class CRUDTest {
     NutritionRecordRepository nRepo;
     @Autowired
     UserRepository uRepo;
-
     @Autowired
     RecipeRepository rRepo;
     @Autowired
     CommentRepository cRepo;
-
     @Autowired
-    private IngredientRepository iRepo;
+    IngredientRepository iRepo;
+    @Autowired
+    HealthRecordRepository hrRepo;
+    @Autowired
+    DietRecordRepository drRepo;
+    @Autowired
+    UserService uService;
+    @Autowired
+    ReportRepository rpRepo;
+    @Autowired
+    RewardService rwService;
+
     public Dish createDishWithNutritionInfo() {
         NutritionRecord n = new NutritionRecord(10.0);
         Dish dish = new Dish("MALA", "path", 100.0, n);
@@ -188,6 +200,84 @@ public class CRUDTest {
         Assertions.assertEquals(1, uRepo.findByName("test-staff").getDislike().size());
         uRepo.delete(uRepo.findByName("test-staff"));
         Assertions.assertNull(uRepo.findByName("test-staff"));
+    }
+
+    @Test
+    @Order(7)
+    public void DeleteAndDepecateTest() {
+        User u1 = new User("test1", "deleted-user", "test", Role.NORMAL);
+        User u2 = new User("test2", "henry", "test", Role.NORMAL);
+        User u3 = new User("test3", "user3", "test", Role.NORMAL);
+        uRepo.saveAndFlush(u1);
+        uRepo.saveAndFlush(u2);
+        uRepo.saveAndFlush(u3);
+        dRepo.saveAndFlush(createDishWithNutritionInfo());
+        Dish d = dRepo.findByName("MALA");
+        LocalDateTime t1 = LocalDateTime.of(2020, 12, 31, 11, 59, 59);
+        Recipe r1 = createRecipeByUserAndDish(u2, d, t1, "11111");
+        Recipe r2 = createRecipeByUserAndDish(u3, d, t1.plusMonths(1), "22222222");
+        Comment c1 = createComment(5.0, "nice", u2, t1, r1);
+        Comment c2 = createComment(1.0, "bad", u3, t1.plusMonths(1), r1);
+        Comment c3 = createComment(5.0, "nice", u2, t1.plusMonths(2), r2);
+        HealthRecord hr = new HealthRecord(u2);
+        hrRepo.saveAndFlush(hr);
+        DietRecord dr = new DietRecord(u2);
+        drRepo.saveAndFlush(dr);
+        Assertions.assertNotNull(uRepo.findByUsername("deleted-user"));
+        Assertions.assertNotNull(uRepo.findByUsername("henry"));
+        Assertions.assertNotNull(uRepo.findByUsername("user3"));
+        Assertions.assertEquals(2, cRepo.findAllByUserId(u2.getId()).size());
+        List<Comment> commentList1 = cRepo.findAllByUserId(u2.getId());
+        System.out.println(u2.getId());
+        for (Comment c : commentList1) {
+            System.out.println(c.getUser());
+        }
+        Report r = new Report(u2);
+        rpRepo.saveAndFlush(r);
+        Assertions.assertNotNull(rpRepo.findById(r.getId()));
+        Assertions.assertEquals(1, cRepo.findAllByUserId(u3.getId()).size());
+        Assertions.assertEquals(0, cRepo.findAllByUserId(u1.getId()).size());
+        Assertions.assertEquals(1, hrRepo.findByUserId(u2.getId()).size());
+        Assertions.assertEquals(1, drRepo.findByUserId(u2.getId()).size());
+        //proceed delete operation
+        uService.deleteUserById(u2.getId());
+        Assertions.assertNotNull(uRepo.findByUsername("deleted-user"));
+        Assertions.assertNull(uRepo.findByUsername("henry"));
+        Assertions.assertNotNull(uRepo.findByUsername("user3"));
+        Assertions.assertEquals(0, cRepo.findAllByUserId(u2.getId()).size());
+        Assertions.assertEquals(1, cRepo.findAllByUserId(u3.getId()).size());
+        Assertions.assertEquals(2, cRepo.findAllByUserId(u1.getId()).size());
+        System.out.println(u1.getId());
+        List<Comment> commentList = cRepo.findAllByUserId(u1.getId());
+        for (Comment c : commentList) {
+            System.out.println(c.getUser());
+        }
+        Assertions.assertEquals(0, hrRepo.findByUserId(u2.getId()).size());
+        Assertions.assertEquals(0, drRepo.findByUserId(u2.getId()).size());
+    }
+
+    @Test
+    @Order(8)
+    public void UserRewardTest(){
+        Reward r1 = new Reward("name1", "desc1");
+        rwService.createReward(r1);
+        Reward r2 = new Reward("name2", "desc2");
+        rwService.createReward(r2);
+        Assertions.assertNotNull(rwService.findByName("name1"));
+        Assertions.assertNotNull(rwService.findByName("name2"));
+        User u = uService.createUser("test2", "henry", "test");
+        Assertions.assertNotNull(uService.findUserByUserNameAndPassword("henry", "test"));
+        rwService.AddRewardToUser(u, r1);
+        rwService.AddRewardToUser(u, r2);
+        Assertions.assertEquals(2, rwService.getRewardsByUserId(u.getId()).size());
+        List<User> uList = rwService.findByRewardId(r1.getId());
+        Assertions.assertEquals(1, uList.size());
+        System.out.println(uList.get(0));
+        uService.deleteUserById(u.getId());
+        Assertions.assertNotNull(rwService.findByName("name1"));
+        Assertions.assertNotNull(rwService.findByName("name2"));
+        Assertions.assertEquals(0, rwService.getRewardsByUserId(u.getId()).size());
+        Assertions.assertEquals(0, rwService.findByRewardId(r1.getId()).size());
     }
 
 

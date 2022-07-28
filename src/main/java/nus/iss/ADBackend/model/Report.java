@@ -21,4 +21,11 @@ public class Report {
     private User user;
     @Enumerated(EnumType.STRING)
     private ReportStatus status;
+    @ManyToOne
+    @JoinColumn(name = "recipeId")
+    private Recipe recipe;
+
+    public Report(User user) {
+        this.user = user;
+    }
 }
