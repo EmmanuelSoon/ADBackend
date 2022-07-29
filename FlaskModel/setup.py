@@ -1,6 +1,7 @@
 from functions import *
 
 def scrapImages():
+    print('scrapping in progress')
     food_list = pd.read_csv('category.csv')
     food_list = food_list['category'].values.tolist()
     print(len(food_list))

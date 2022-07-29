@@ -51,12 +51,12 @@ def convert_img(df, dir_name, img_size):
 
 
 # B0 efficient Net Model 
-def B0model(img_size, img_augmentation, num_classes):
-    from tensorflow.keras.applications import EfficientNetB0
+def model_training(img_size, img_augmentation, num_classes):
+    from tensorflow.keras.applications import EfficientNetB2
 
     inputs = layers.Input(shape=(img_size, img_size, 3))
     x = img_augmentation(inputs)
-    model_EN = EfficientNetB0(include_top=False, input_tensor=x, weights="imagenet")
+    model_EN = EfficientNetB2(include_top=False, input_tensor=x, weights="imagenet")
 
     # Freeze the pretrained weights
     model_EN.trainable = False

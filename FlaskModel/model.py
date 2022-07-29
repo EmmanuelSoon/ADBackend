@@ -34,6 +34,7 @@ def buildModel():
 
 
     ##----------------------------------------- Training the model -----------------------------------------------------##
+    print('loading dataset...')
     train_img = convert_img(train["image"], train_dir, img_size)
     test_img = convert_img(test["image"], test_dir, img_size)
 
@@ -42,8 +43,9 @@ def buildModel():
     cat_test = OneHotEncoder().fit_transform(test[["food categories"]]).toarray()
     x_train, x_val, y_train, y_val = train_test_split(train_img, cat_train, random_state =99, test_size=0.1)
 
+    print('training model in progress...')
     #Using B0 model
-    model_EN = B0model(224, img_augmentation, num_classes)
+    model_EN = model_training(260, img_augmentation, num_classes)
     hist_EN = model_EN.fit(x_train, y_train, epochs=epoch, verbose=2, validation_data=(x_val, y_val), shuffle=True)
 
     #Saving the model as JSON format 

@@ -36,7 +36,7 @@ def predict():
     # convert json string back into img   
     img = Image.open(io.BytesIO(data))
     from numpy import asarray
-    resized = tf.image.resize(img, (224,224))
+    resized = tf.image.resize(img, (260,260))
 
     numpydata = asarray(resized, dtype=int) 
     numpydata = np.expand_dims(numpydata, 0)
@@ -63,7 +63,7 @@ if __name__ == '__main__':
         print('Image folders not found, scraping the web for images now...Please wait')
         setup.scrapImages()
     
-    if not os.path.isdir(model_file) and not os.path.isdir(model_h5):
+    if not os.path.isfile(model_file) and not os.path.isfile(model_h5):
         print('Model not found, training model now... Please wait')
         model.buildModel()
     
