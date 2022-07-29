@@ -19,7 +19,7 @@ import nus.iss.ADBackend.model.User;
 
 @RestController
 @RequestMapping(value= "/user", produces = "application/json")
-public class userController {
+public class loggerController {
     
 
     @RequestMapping("/gethealthrecords")
