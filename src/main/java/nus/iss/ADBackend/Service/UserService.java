@@ -116,4 +116,10 @@ public class UserService {
     public List<User> findAllUsersByGoal(Goal goal) {
         return uRepo.findAllByGoal(goal);
     }
+
+    public void saveAllUsers(List<User> list) {
+        for (User u : list) {
+            saveUser(u);
+        }
+    }
 }
