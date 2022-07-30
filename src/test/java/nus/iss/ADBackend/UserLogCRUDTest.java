@@ -87,10 +87,10 @@ public class UserLogCRUDTest {
 		fdRepo.saveAndFlush(fd1);
 		DietRecord fd2 = fdRepo.findById(fd1.getId());
 		Assertions.assertNotNull(fd2);
-		fd2.setType(MealType.EXTRA);
+		fd2.setMealType(MealType.EXTRA);
 		fdRepo.saveAndFlush(fd2);
 		DietRecord fd3 = fdRepo.findById(fd1.getId());
-		Assertions.assertEquals(MealType.EXTRA, fd3.getType());
+		Assertions.assertEquals(MealType.EXTRA, fd3.getMealType());
 	}
 
 	@Test

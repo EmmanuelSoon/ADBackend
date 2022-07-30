@@ -1,4 +1,5 @@
 ﻿name,username,password,role
+Henry,Henry@gmail.com,password,0
 James,James@gmail.com,password,0
 Robert,Robert@gmail.com,password,0
 John,John@gmail.com,password,0
@@ -23,3 +24,5 @@ Kenneth,Kenneth@gmail.com,password,0
 Kevin,Kevin@gmail.com,password,0
 Brian,Brian@gmail.com,password,1
 George,George@gmail.com,password,1
+deleted-user,deleted-user@gmail.com,password,1
+official-user,official-user@gmail.com,password,1

@@ -13,7 +13,7 @@ public class HealthRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @FutureOrPresent
+
     private LocalDate date;
     
     private double userWeight;
@@ -33,5 +33,14 @@ public class HealthRecord {
     public HealthRecord(User user, LocalDate date) {
         this.user = user;
         this.date = date;
+    }
+
+    public HealthRecord(LocalDate date, double userWeight, double userHeight, double calIntake, double waterIntake, User user) {
+        this.date = date;
+        this.userWeight = userWeight;
+        this.userHeight = userHeight;
+        this.calIntake = calIntake;
+        this.waterIntake = waterIntake;
+        this.user = user;
     }
 }
