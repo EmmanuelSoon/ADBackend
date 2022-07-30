@@ -14,11 +14,11 @@ public class IngredientService {
     IngredientRepository iRepo;
 
 
-    void createIngredient(Ingredient ingredient) {
+    public void createIngredient(Ingredient ingredient) {
         iRepo.saveAndFlush(ingredient);
     }
     @Transactional
-    boolean saveIngredient(Ingredient ingredient) {
+    public boolean saveIngredient(Ingredient ingredient) {
         if (iRepo.findById(ingredient.getId()) != null) {
             iRepo.saveAndFlush(ingredient);
             return true;
@@ -27,10 +27,10 @@ public class IngredientService {
         return false;
     }
 
-    List<Ingredient> findSimilarIngredients(String ingredientName) {
+    public List<Ingredient> findSimilarIngredients(String ingredientName) {
         return iRepo.findSimilarIngredientsByName(ingredientName.toLowerCase());
     }
-    List<Ingredient> findIngredientsWithCaloriesLowerThan(double val) {
+    public List<Ingredient> findIngredientsWithCaloriesLowerThan(double val) {
         return iRepo.findAllByMaxCalories(val);
     }
 }
