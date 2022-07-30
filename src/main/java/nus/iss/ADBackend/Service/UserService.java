@@ -86,7 +86,6 @@ public class UserService {
         drRepo.deleteByUserId(id);
         urRepo.deleteByUserId(id);
         rpRepo.deleteByUserId(id);
-
         deprecateCommentAndRecipe(id, deleteUser);
         uRepo.deleteById(id);
         return true;

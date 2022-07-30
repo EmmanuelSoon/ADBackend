@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.FutureOrPresent;
 import java.time.LocalDate;
 
 @Entity
@@ -15,13 +14,12 @@ public class DietRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @FutureOrPresent
     private LocalDate date;
     private String foodName;
     private double calorie;
     private double weight;
     @Enumerated(EnumType.STRING)
-    private MealType type;
+    private MealType mealType;
     @ManyToOne
     @JoinColumn(name = "userId")
     private User user;
@@ -29,7 +27,7 @@ public class DietRecord {
     public DietRecord(User user, String foodName, MealType meal, Double calCount, Double weight) {
         this.user = user;
         this.foodName = foodName;
-        this.type = meal;
+        this.mealType = meal;
         this.calorie = calCount;
         this.weight = weight;
         this.date = LocalDate.now();
@@ -37,5 +35,13 @@ public class DietRecord {
     public DietRecord(User user) {
         this.user = user;
         this.date = LocalDate.now();
+    }
+    public DietRecord(LocalDate date, User user, String foodName, MealType meal, Double calCount, Double weight) {
+        this.date = date;
+        this.foodName = foodName;
+        this.calorie =  calCount;
+        this.weight = weight;
+        this.mealType = meal;
+        this.user = user;
     }
 }

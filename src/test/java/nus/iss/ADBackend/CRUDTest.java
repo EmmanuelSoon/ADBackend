@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.w3c.dom.ls.LSInput;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -279,6 +280,4 @@ public class CRUDTest {
         Assertions.assertEquals(0, rwService.getRewardsByUserId(u.getId()).size());
         Assertions.assertEquals(0, rwService.findByRewardId(r1.getId()).size());
     }
-
-
 }

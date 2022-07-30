@@ -17,7 +17,7 @@ public class Dish {
     private String image;
     //@Column(name = "calorie/100g")
     private double calorie;
-    private String ingredients;
+    private String ingredients; //cater for keywords search
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "nutritionId")
     private NutritionRecord nutritionRecord;
