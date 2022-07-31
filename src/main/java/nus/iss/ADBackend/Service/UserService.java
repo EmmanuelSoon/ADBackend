@@ -121,4 +121,8 @@ public class UserService {
             saveUser(u);
         }
     }
+
+    public User findUserByUsername(String username){
+        return uRepo.findByUsername(username);
+    }
 }

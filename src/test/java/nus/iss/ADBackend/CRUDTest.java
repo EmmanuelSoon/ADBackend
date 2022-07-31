@@ -1,7 +1,9 @@
 package nus.iss.ADBackend;
 
 
+import nus.iss.ADBackend.DataSeedingService.DataSeedingService;
 import nus.iss.ADBackend.Repo.*;
+import nus.iss.ADBackend.Service.DietRecordService;
 import nus.iss.ADBackend.Service.RewardService;
 import nus.iss.ADBackend.Service.UserService;
 import nus.iss.ADBackend.model.*;
@@ -16,10 +18,14 @@ import org.w3c.dom.ls.LSInput;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @DataJpaTest
-@Import({UserService.class, RewardService.class})
+@Import({UserService.class, RewardService.class, DietRecordService.class, DataSeedingService.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class CRUDTest {
 
@@ -45,6 +51,12 @@ public class CRUDTest {
     ReportRepository rpRepo;
     @Autowired
     RewardService rwService;
+    @Autowired
+    DietRecordService dietRecordService;
+
+    @Autowired
+    DataSeedingService dataSeedingService;
+
 
     public Dish createDishWithNutritionInfo() {
         NutritionRecord n = new NutritionRecord(10.0);
@@ -279,5 +291,24 @@ public class CRUDTest {
         Assertions.assertNotNull(rwService.findByName("name2"));
         Assertions.assertEquals(0, rwService.getRewardsByUserId(u.getId()).size());
         Assertions.assertEquals(0, rwService.findByRewardId(r1.getId()).size());
+    }
+
+    @Test
+    @Order(9)
+    public void findbyUserIdandDateTest(){
+        String dateString = "30-JUL-2022";
+        String username = "Henry@gmail.com";
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+        .parseCaseInsensitive()
+        .appendPattern("dd-MMM-yyyy")
+        .toFormatter(Locale.ENGLISH);
+
+        LocalDate date = LocalDate.parse(dateString, formatter);
+
+        User curr = uService.findUserByUsername(username);
+        List<DietRecord> dList = new ArrayList<>();
+        dList = dietRecordService.findByUserIdAndDate(curr.getId(), date);
+        Assertions.assertNotNull(curr);
+
     }
 }

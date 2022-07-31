@@ -16,10 +16,10 @@ public class DietRecordService {
     @Autowired
     DietRecordRepository drRepo;
 
-    void createDietRecord(DietRecord dr) {
+    public void createDietRecord(DietRecord dr) {
         drRepo.saveAndFlush(dr);
     }
-    boolean saveDietRecord(DietRecord dr) {
+    public boolean saveDietRecord(DietRecord dr) {
         if (drRepo.findById(dr.getId()) != null) {
             drRepo.saveAndFlush(dr);
             return true;
@@ -27,16 +27,16 @@ public class DietRecordService {
         return false;
     }
 
-    List<DietRecord> findByUserId(int userId) {
+    public List<DietRecord> findByUserId(int userId) {
         return drRepo.findByUserId(userId);
     }
 
-    List<DietRecord> findByUserIdAndDate(int userId, LocalDate date) {
+    public List<DietRecord> findByUserIdAndDate(int userId, LocalDate date) {
         return drRepo.findByUserIdAndDate(userId, date);
     }
 
     @Transactional
-    boolean deleteDietRecordById(int id) {
+    public boolean deleteDietRecordById(int id) {
         if (drRepo.findById(id) != null) {
             drRepo.deleteById(id);
             return true;
@@ -44,7 +44,7 @@ public class DietRecordService {
         return false;
     }
 
-    double getTotalCaloriesByUserIdAndDate(int userId, LocalDate date) {
+    public double getTotalCaloriesByUserIdAndDate(int userId, LocalDate date) {
         List<DietRecord> dietRecords= findByUserIdAndDate(userId, date);
         double res = 0.0;
         for (DietRecord record : dietRecords) {
