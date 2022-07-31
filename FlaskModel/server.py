@@ -1,5 +1,5 @@
 from genericpath import isfile
-from tkinter import Image
+# from tkinter import Image
 import numpy as np 
 from flask import Flask, request, jsonify
 from functions import *
@@ -36,7 +36,7 @@ def predict():
     # convert json string back into img   
     img = Image.open(io.BytesIO(data))
     from numpy import asarray
-    resized = tf.image.resize(img, (260,260))
+    resized = tf.image.resize(np.array(img), (260,260))
 
     numpydata = asarray(resized, dtype=int) 
     numpydata = np.expand_dims(numpydata, 0)
