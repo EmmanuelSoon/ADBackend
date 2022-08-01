@@ -1,4 +1,5 @@
 from genericpath import isfile
+
 import numpy as np 
 from flask import Flask, request, jsonify
 from functions import *
@@ -36,9 +37,9 @@ def predict():
     img = Image.open(io.BytesIO(data))
     print(type(img))
     from numpy import asarray
+
     #resized = tf.image.resize(img,(260,260))
     resized = img.resize((260,260))
-
 
 
     numpydata = asarray(resized, dtype=int) 
