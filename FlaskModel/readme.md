@@ -13,5 +13,6 @@ For first time setups please do the following
     - webdriver_manager 
 
 3. download the chromedriver.exe according to the your chrome ver. and put into into the FlaskModel Folder 
+    https://sites.google.com/chromium.org/driver/
 4. move into the FlaskModel folder 
 5. run server.py which is your flask app (localhost:5000)
