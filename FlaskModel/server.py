@@ -1,5 +1,5 @@
 from genericpath import isfile
-# from tkinter import Image
+
 import numpy as np 
 from flask import Flask, request, jsonify
 from functions import *
@@ -11,14 +11,14 @@ import setup
 import model
 
 
-train_dir = './images/'
+train_dir = 'FlaskModel/images/'
 
 
 app = Flask(__name__)
 
 # Load the model
 def compileModel():
-    loaded_model = loadModel('model.json', 'model.h5')
+    loaded_model = loadModel('FlaskModel/model.json', 'FlaskModel/model.h5')
     loaded_model.compile(
         optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"]
     )
@@ -35,8 +35,12 @@ def predict():
 
     # convert json string back into img   
     img = Image.open(io.BytesIO(data))
+    print(type(img))
     from numpy import asarray
-    resized = tf.image.resize(np.array(img), (260,260))
+
+    #resized = tf.image.resize(img,(260,260))
+    resized = img.resize((260,260))
+
 
     numpydata = asarray(resized, dtype=int) 
     numpydata = np.expand_dims(numpydata, 0)
@@ -44,20 +48,19 @@ def predict():
 
     # Make prediction using model loaded from disk as per the data.
     pred = np.argmax(loaded_model.predict(numpydata))
-    print(train['food categories'].unique()[pred])  
-    
-    
+    print(np.sort(train['food categories'].unique()))  
+    print(np.sort(train['food categories'].unique())[pred])  
       
-    return jsonify(train['food categories'].unique()[pred])
+    return jsonify(np.sort(train['food categories'].unique())[pred])
     
     
 
 if __name__ == '__main__':
 
-    image_folder = './images'
-    test_images = './test_images'
-    model_file = './model.json'
-    model_h5 = './model.h5'
+    image_folder = 'FlaskModel/images'
+    test_images = 'FlaskModel/test_images'
+    model_file = 'FlaskModel/model.json'
+    model_h5 = 'FlaskModel/model.h5'
 
     if not os.path.isdir(image_folder) and not os.path.isdir(test_images):
         print('Image folders not found, scraping the web for images now...Please wait')

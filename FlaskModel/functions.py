@@ -52,7 +52,7 @@ def convert_img(df, dir_name, img_size):
 
 # B0 efficient Net Model 
 def model_training(img_size, img_augmentation, num_classes):
-    from tensorflow.keras.applications import EfficientNetB2
+    from keras.applications import EfficientNetB2
 
     inputs = layers.Input(shape=(img_size, img_size, 3))
     x = img_augmentation(inputs)
@@ -90,7 +90,7 @@ def SaveModel(model):
 
 # Load saved model 
 def loadModel(model_path, h5_file):
-    from tensorflow.keras.models import model_from_json
+    from keras.models import model_from_json
 
     # load json and create model
     json_file = open(model_path, 'r')
