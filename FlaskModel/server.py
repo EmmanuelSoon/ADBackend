@@ -10,15 +10,16 @@ import tensorflow as tf
 import setup
 import model
 
+curr_dir = os.getcwd()
 
-train_dir = 'FlaskModel/images/'
-
+# train_dir = 'FlaskModel/images/'
+train_dir = os.path.join(curr_dir, 'images/')
 
 app = Flask(__name__)
 
 # Load the model
 def compileModel():
-    loaded_model = loadModel('FlaskModel/model.json', 'FlaskModel/model.h5')
+    loaded_model = loadModel(os.path.join(curr_dir,'model.json'), os.path.join(curr_dir,'model.h5'))
     loaded_model.compile(
         optimizer="adam", loss="categorical_crossentropy", metrics=["accuracy"]
     )
@@ -57,12 +58,18 @@ def predict():
 
 if __name__ == '__main__':
 
-    image_folder = 'FlaskModel/images'
-    test_images = 'FlaskModel/test_images'
-    model_file = 'FlaskModel/model.json'
-    model_h5 = 'FlaskModel/model.h5'
+    image_folder = os.path.join(curr_dir,'images')
+    test_images = os.path.join(curr_dir,'test_images')
+    model_file = os.path.join(curr_dir,'model.json')
+    model_h5 = os.path.join(curr_dir,'model.h5')
 
-    if not os.path.isdir(image_folder) and not os.path.isdir(test_images):
+
+    # image_folder = 'FlaskModel/images'
+    # test_images = 'FlaskModel/test_images'
+    # model_file = 'FlaskModel/model.json'
+    # model_h5 = 'FlaskModel/model.h5'
+
+    if not os.path.isdir(image_folder):
         print('Image folders not found, scraping the web for images now...Please wait')
         setup.scrapImages()
     

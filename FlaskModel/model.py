@@ -12,8 +12,9 @@ from functions import *
 
 def buildModel():
     # Train and test dataframes
-    train_dir = './images/'
-    test_dir = './test_images/'
+    curr_dir = os.getcwd()
+    train_dir =  os.path.join(curr_dir,'images')
+    test_dir = os.path.join(curr_dir,'test_images')
 
     train = create_df(train_dir)
     test = create_df(test_dir)
