@@ -1,7 +1,7 @@
 from functions import *
 
 def scrapImages():
-    curr_dir = os.getcwd()
+    curr_dir = os.path.dirname(os.path.realpath(__file__))
     print('scrapping in progress')
     food_list = pd.read_csv(os.path.join(curr_dir,'category.csv'))
     food_list = food_list['0'].values.tolist()

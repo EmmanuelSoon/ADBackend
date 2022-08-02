@@ -10,7 +10,7 @@ import tensorflow as tf
 import setup
 import model
 
-curr_dir = os.getcwd()
+curr_dir = os.path.dirname(os.path.realpath(__file__))
 
 # train_dir = 'FlaskModel/images/'
 train_dir = os.path.join(curr_dir, 'images/')
@@ -57,6 +57,12 @@ def predict():
     
 
 if __name__ == '__main__':
+
+
+    print(__file__)
+    print(os.path.dirname(__file__))
+    print(os.path.dirname(os.path.realpath(__file__)))
+    print(os.getcwd())
 
     image_folder = os.path.join(curr_dir,'images')
     test_images = os.path.join(curr_dir,'test_images')
