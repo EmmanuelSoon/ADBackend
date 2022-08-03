@@ -31,12 +31,9 @@ public class searchController {
         try{
             double calSearch = Double.parseDouble(search);
             iList = ingredientService.findIngredientsWithCaloriesLowerThan(calSearch);
-            System.out.println("getting double");
-
         }
         catch (NumberFormatException numEx){
             iList = ingredientService.findSimilarIngredients(search);
-            System.out.println("getting string");
         }
 
         

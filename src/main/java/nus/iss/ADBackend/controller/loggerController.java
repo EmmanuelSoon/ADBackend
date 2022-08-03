@@ -66,4 +66,14 @@ public class loggerController {
         return dList;
     }
 
+    @RequestMapping("/adddietrecord")
+    public void addDietRecord (@RequestBody JSONObject response) throws IOException, ParseException{
+        String username = response.getAsString("username");
+        String dateString = response.getAsString("date");
+        String mealName = response.getAsString("mealName");
+        String mealType = response.getAsString("mealType");
+        double mealCals = Double.valueOf(response.getAsString("mealName"));
+        
+    }
+
 }
