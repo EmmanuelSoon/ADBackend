@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +29,9 @@ public class homeController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    DietRecordService dietService;
     
     @RequestMapping("/gethealthrecords")
     public List<HealthRecord> getHealthRecords(@RequestBody JSONObject response) throws IOException, ParseException{
@@ -35,8 +39,6 @@ public class homeController {
         String dateString = response.getAsString("date");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
         LocalDate date = LocalDate.parse(dateString, formatter);
-//        System.out.println((username));
-//        System.out.println(date);
 
         User curr = userService.findUserByUsername(username);
         List<HealthRecord> hrList = healthRecService.findHealthRecordListByUserIdAndDate(curr.getId(), date);
@@ -52,4 +54,21 @@ public class homeController {
         List<HealthRecord> hrList = healthRecService.findAllHealthRecordsByUserId(curr.getId());
         return hrList;
     }
+
+    @GetMapping("/getcals")
+    public String getUserCaloriesConsumed(@RequestBody JSONObject response) throws IOException, ParseException{
+        String username = response.getAsString("username");
+        User curr = userService.findUserByUsername(username);
+        String dateString = response.getAsString("date");
+        LocalDate date = LocalDate.parse(dateString);
+
+        Double cals = dietService.getTotalCaloriesByUserIdAndDate(curr.getId(), date);
+    
+        return cals.toString();
+    }
+
+
+
+
+
 }

@@ -9,8 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.minidev.json.JSONObject;
@@ -67,12 +69,25 @@ public class loggerController {
     }
 
     @RequestMapping("/adddietrecord")
+    @ResponseStatus(HttpStatus.OK)
     public void addDietRecord (@RequestBody JSONObject response) throws IOException, ParseException{
+        System.out.println("in add diet record");
+
         String username = response.getAsString("username");
+        User user = userService.findUserByUsername(username);
         String dateString = response.getAsString("date");
+        LocalDate date = LocalDate.parse(dateString);
         String mealName = response.getAsString("mealName");
         String mealType = response.getAsString("mealType");
-        double mealCals = Double.valueOf(response.getAsString("mealName"));
+        double mealCals = Double.valueOf(response.getAsString("calories"));
+        double weight = Double.valueOf(response.getAsString("weight"));
+
+        DietRecord myDr = new DietRecord(date, user, mealName, MealType.valueOf(mealType), mealCals, weight);
+        
+        dietRecordService.createDietRecord(myDr);
+        
+
+
         
     }
 
