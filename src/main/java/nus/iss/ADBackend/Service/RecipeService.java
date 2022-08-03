@@ -56,4 +56,7 @@ public class RecipeService {
         return rRepo.findAll();
     }
 
+    public Recipe findRecipeById(int id){
+        return rRepo.findById(id);
+    }
 }

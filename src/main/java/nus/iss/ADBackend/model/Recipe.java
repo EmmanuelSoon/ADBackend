@@ -44,8 +44,12 @@ public class Recipe {
     public double getTotalCalories() {
         double total = 0.0;
         for (WeightedIngredient weightedIngredient : ingredientList) {
-            total += weightedIngredient.getCalorie();
+            total += weightedIngredient.getCalorie()/100.0;
         }
         return total;
+    }
+
+    public NutritionRecord getNutritionRecord(){
+        return dish.getNutritionRecord();
     }
 }
