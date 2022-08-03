@@ -29,14 +29,16 @@ public class Recipe {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<WeightedIngredient> ingredientList = new ArrayList<>();
-    private String procedures;
+    /*    @Column(length = Integer.MAX_VALUE)
+        private String procedures;*/
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Procedure> procedures = new ArrayList<>();
 
-    public Recipe(String image, User user, Dish dish, LocalDateTime dateTime, String procedures) {
+    public Recipe(String image, User user, Dish dish, LocalDateTime dateTime) {
         this.image = image;
         this.user = user;
         this.dish = dish;
         this.dateTime = dateTime;
-        this.procedures = procedures;
     }
 
     public double getTotalCalories() {
