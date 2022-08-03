@@ -122,7 +122,7 @@ public class DataSeedingService {
         }
     }
 
-    public void seedDishAndRecipe(String name, double[] weights, String[] Ingredients, String[] procedures){
+    public void seedDishAndRecipe(String name, double[] weights, String[] Ingredients, String[] procedures, String imageName){
         String keywords = "";
         for (int i = 0; i < Ingredients.length; i++) {
             if (i!=0) {
@@ -153,6 +153,7 @@ public class DataSeedingService {
         recipe.setUser(u);
         recipe.setDish(d);
         recipe.setDateTime(LocalDateTime.now());
+        recipe.setImage(imageName);
         rRepo.saveAndFlush(recipe);
     }
     private NutritionRecord createNutritionRecordByList(List<WeightedIngredient> ingredientList) {
@@ -242,7 +243,6 @@ public class DataSeedingService {
                 "Divide the ramen noodles into four bowls. Top with ramen eggs, chopped scallions, sesame seeds (if using), and dashes of chili oil. Serve the ramen immediately, do not keep in the pot as they will turn soggy."
         };
         String name2 = "Instant Pot Ramen";
-
         String[] Ingredients3 = new String[]{"Rice","Luncheon Meat", "Scallion Spring Onion", "Egg", "Iceberg Lettuce", "Salt", "Light Soya Sauce", "Vegetable Oil"};
         double[] weights3 = new double[]{200, 50, 10, 50, 100, 2, 8,5};
         String[] procedures3 = new String[]{
@@ -282,12 +282,11 @@ public class DataSeedingService {
                 "Keep in an airtight container and store in the refrigerator for up to 2-3 days. However, it's possible that the cucumber releases more moisture and the sauce may get diluted. Enjoy it soon!"
         };
         String name5 = "Japanese Cucumber Salad";
-
-        seedDishAndRecipe(name1, weights1, Ingredients1, procedures1);
-        seedDishAndRecipe(name2, weights2, Ingredients2, procedures2);
-        seedDishAndRecipe(name3, weights3, Ingredients3, procedures3);
-        seedDishAndRecipe(name4, weights4, Ingredients4, procedures4);
-        seedDishAndRecipe(name5, weights5, Ingredients5, procedures5);
+        seedDishAndRecipe(name1, weights1, Ingredients1, procedures1, "recipe1.jpg");
+        seedDishAndRecipe(name2, weights2, Ingredients2, procedures2, "recipe2.jpg");
+        seedDishAndRecipe(name3, weights3, Ingredients3, procedures3, "recipe3.jpg");
+        seedDishAndRecipe(name4, weights4, Ingredients4, procedures4, "recipe4.jpg");
+        seedDishAndRecipe(name5, weights5, Ingredients5, procedures5, "recipe5.jpg");
     }
     public void launchSeeding() throws IOException {
         seedUserFromCSV("./src/main/resources/data/userdata.csv");
