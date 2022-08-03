@@ -18,20 +18,27 @@ public class HealthRecordService {
     @Autowired
     UserRepository uRepo;
 
-    void createHealthRecord(HealthRecord hr) {
+    public void createHealthRecord(HealthRecord hr) {
         hrRepo.saveAndFlush(hr);
     }
-    boolean saveHealthRecord(HealthRecord hr) {
+    
+    public boolean saveHealthRecord(HealthRecord hr) {
         if (hrRepo.findById(hr.getId()) != null) {
             hrRepo.saveAndFlush(hr);
             return true;
         }
         return false;
     }
-    HealthRecord findHealthRecordByUserIdAndDate(int userId, LocalDate date) {
+    
+    public HealthRecord findHealthRecordByUserIdAndDate(int userId, LocalDate date) {
         return hrRepo.findByUserIdAndAndDate(userId, date);
     }
-    HealthRecord createHealthRecordIfAbsent(int userId, LocalDate date) {
+    
+    public List<HealthRecord> findHealthRecordListByUserIdAndDate(int userId, LocalDate date) {
+        return hrRepo.findListByUserIdAndAndDate(userId, date);
+    }
+    
+    public HealthRecord createHealthRecordIfAbsent(int userId, LocalDate date) {
         if (findHealthRecordByUserIdAndDate(userId, date) != null) {
             return findHealthRecordByUserIdAndDate(userId, date);
         }
@@ -45,7 +52,7 @@ public class HealthRecordService {
         return hr;
     }
 
-    List<HealthRecord> findAllHealthRecordsByUserId(int userId) {
+    public List<HealthRecord> findAllHealthRecordsByUserId(int userId) {
         return hrRepo.findByUserId(userId);
     }
 }

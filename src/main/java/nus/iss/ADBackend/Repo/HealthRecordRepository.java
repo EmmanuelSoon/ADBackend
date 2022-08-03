@@ -23,5 +23,7 @@ public interface HealthRecordRepository extends JpaRepository<HealthRecord, Inte
     void deleteByUserId(int userId);
     @Query("Select hr from HealthRecord hr where hr.user.id = ?1 and hr.date = ?2")
     HealthRecord findByUserIdAndAndDate(int id, LocalDate date);
-
+    
+    @Query("Select hr from HealthRecord hr where hr.user.id = ?1 and hr.date = ?2")
+    List<HealthRecord> findListByUserIdAndAndDate(int id, LocalDate date);
 }
