@@ -52,4 +52,8 @@ public class RecipeService {
         return deleteRecipeById(recipe.getId());
     }
 
+    public List<Recipe> getAllRecipes(){
+        return rRepo.findAll();
+    }
+
 }
