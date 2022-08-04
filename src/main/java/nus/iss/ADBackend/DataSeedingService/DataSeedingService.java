@@ -122,7 +122,7 @@ public class DataSeedingService {
         }
     }
 
-    public void seedDishAndRecipe(String name, double[] weights, String[] Ingredients, String[] procedures, String imageName){
+    public void seedDishAndRecipe(String name, double[] weights, String[] Ingredients, String[] procedures, String imageName, int portion){
         String keywords = "";
         for (int i = 0; i < Ingredients.length; i++) {
             if (i!=0) {
@@ -141,7 +141,7 @@ public class DataSeedingService {
             proceduresList.add(p);
         }
         NutritionRecord record = createNutritionRecordByList(ingredientList);
-        //Dish d = new Dish("Spaghetti Aglio e Olio");
+
         Dish d = new Dish(name);
         d.setNutritionRecord(record);
         d.setCalorie(record.getTotalCalories());
@@ -154,9 +154,12 @@ public class DataSeedingService {
         recipe.setDish(d);
         recipe.setDateTime(LocalDateTime.now());
         recipe.setImage(imageName);
+        recipe.setNutritionRecord(createNutritionRecordByList(ingredientList));
+        recipe.setPortion(portion);
+        recipe.setName(name);
         rRepo.saveAndFlush(recipe);
     }
-    private NutritionRecord createNutritionRecordByList(List<WeightedIngredient> ingredientList) {
+    public NutritionRecord createNutritionRecordByList(List<WeightedIngredient> ingredientList) {
         NutritionRecord nutritionRecord = new NutritionRecord();
         double ServingSize = 0.0;
         for (WeightedIngredient weightedIngredient : ingredientList) {
@@ -243,6 +246,7 @@ public class DataSeedingService {
                 "Divide the ramen noodles into four bowls. Top with ramen eggs, chopped scallions, sesame seeds (if using), and dashes of chili oil. Serve the ramen immediately, do not keep in the pot as they will turn soggy."
         };
         String name2 = "Instant Pot Ramen";
+
         String[] Ingredients3 = new String[]{"Rice","Luncheon Meat", "Scallion Spring Onion", "Egg", "Iceberg Lettuce", "Salt", "Light Soya Sauce", "Vegetable Oil"};
         double[] weights3 = new double[]{200, 50, 10, 50, 100, 2, 8,5};
         String[] procedures3 = new String[]{
@@ -260,7 +264,6 @@ public class DataSeedingService {
                 "Add the green part of the chopped green onion. Taste the fried rice and adjust the seasoning if needed. After tossing the rice a few more times, transfer it to a plate."
         };
         String name3 = "Japanese Fried Rice";
-
         String[] Ingredients4 = new String[]{"Broccoli", "Oil", "Garlic", "Salt", "Light Soya Sauce", "Sugar", "Oyster Sauce"};
         double[] weights4 = new double[]{600, 4, 20, 4, 2, 2, 2};
         String[] procedures4 = new String[]{
@@ -282,11 +285,11 @@ public class DataSeedingService {
                 "Keep in an airtight container and store in the refrigerator for up to 2-3 days. However, it's possible that the cucumber releases more moisture and the sauce may get diluted. Enjoy it soon!"
         };
         String name5 = "Japanese Cucumber Salad";
-        seedDishAndRecipe(name1, weights1, Ingredients1, procedures1, "recipe1.jpg");
-        seedDishAndRecipe(name2, weights2, Ingredients2, procedures2, "recipe2.jpg");
-        seedDishAndRecipe(name3, weights3, Ingredients3, procedures3, "recipe3.jpg");
-        seedDishAndRecipe(name4, weights4, Ingredients4, procedures4, "recipe4.jpg");
-        seedDishAndRecipe(name5, weights5, Ingredients5, procedures5, "recipe5.jpg");
+        seedDishAndRecipe(name1, weights1, Ingredients1, procedures1, "recipe1.jpg", 1);
+        seedDishAndRecipe(name2, weights2, Ingredients2, procedures2, "recipe2.jpg",3);
+        seedDishAndRecipe(name3, weights3, Ingredients3, procedures3, "recipe3.jpg",2);
+        seedDishAndRecipe(name4, weights4, Ingredients4, procedures4, "recipe4.jpg",4);
+        seedDishAndRecipe(name5, weights5, Ingredients5, procedures5, "recipe5.jpg",4);
     }
     public void launchSeeding() throws IOException {
         seedUserFromCSV("./src/main/resources/data/userdata.csv");

@@ -33,4 +33,12 @@ public class IngredientService {
     public List<Ingredient> findIngredientsWithCaloriesLowerThan(double val) {
         return iRepo.findAllByMaxCalories(val);
     }
+
+    public List<Ingredient> getAllIngredient(){
+        return iRepo.findAll();
+    }
+
+    public Ingredient findIngredientById(int id) {
+        return iRepo.findById(id).orElse(null);
+    }
 }

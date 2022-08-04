@@ -18,7 +18,7 @@ public class WeightedIngredient {
     private double weight;
     // getter for json response
     public double getCalorie() {
-        return weight * ingredient.getCalorie();
+        return weight * ingredient.getCalorie()/100.0;
     }
 
     public WeightedIngredient(Ingredient ingredient, double weight) {

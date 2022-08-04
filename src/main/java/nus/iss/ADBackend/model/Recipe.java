@@ -17,23 +17,28 @@ public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    private String name;
+    @Column(length = Integer.MAX_VALUE)
     private String image;
     @ManyToOne
     @JoinColumn(name = "userId")
     private User user;
     @ManyToOne
     @JoinColumn(name = "dishId")
-    private Dish dish;
+    private Dish dish = null;
     @Column(name = "createdOn")
     private LocalDateTime dateTime;
-
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<WeightedIngredient> ingredientList = new ArrayList<>();
-    /*    @Column(length = Integer.MAX_VALUE)
-        private String procedures;*/
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Procedure> procedures = new ArrayList<>();
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "nutritionId")
+    private NutritionRecord nutritionRecord;
+
+    private int portion;
     public Recipe(String image, User user, Dish dish, LocalDateTime dateTime) {
         this.image = image;
         this.user = user;
@@ -48,8 +53,12 @@ public class Recipe {
         }
         return total;
     }
-
     public NutritionRecord getNutritionRecord(){
-        return dish.getNutritionRecord();
+        if (dish != null) {
+            return dish.getNutritionRecord();
+        }
+        else {
+            return nutritionRecord;
+        }
     }
 }
