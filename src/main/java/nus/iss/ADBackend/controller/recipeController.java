@@ -69,4 +69,21 @@ public class recipeController {
     public Recipe getrecipe(@PathVariable int id){
         return recipeService.findRecipeById(id);
     }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity editRecipe(@PathVariable int id, @RequestBody RecipeForm recipeForm){
+        int userId = recipeForm.getUserId();
+        int portion = recipeForm.getPortion();
+        List<String> procedures = recipeForm.getProcedures();
+        List<WeightedIngredient> weightedIngredients = recipeForm.getWeightedIngredients();
+        String name = recipeForm.getName();
+        
+        Recipe editedRecipe = recipeService.findRecipeById(id);
+        String imageDataUrl = editedRecipe.getImage();
+
+        if(recipeService.editRecipe(userId, weightedIngredients, procedures, imageDataUrl, portion, name, editedRecipe)){
+            return new ResponseEntity<>(null, HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
+    }
 }
