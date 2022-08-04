@@ -20,6 +20,7 @@ public class HealthRecord {
     private double userHeight;
     private double calIntake;
     private double waterIntake;
+
     
     @ManyToOne
     @JoinColumn(name = "userId")

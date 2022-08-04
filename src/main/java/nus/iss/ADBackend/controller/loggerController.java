@@ -56,7 +56,7 @@ public class loggerController {
     public List<DietRecord> getDietRecords(@RequestBody JSONObject response) throws IOException, ParseException{
         String username = response.getAsString("username");
         String dateString = response.getAsString("date");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate date = LocalDate.parse(dateString, formatter);
         // System.out.println((username));
         
@@ -73,6 +73,7 @@ public class loggerController {
     public void addDietRecord (@RequestBody JSONObject response) throws IOException, ParseException{
         System.out.println("in add diet record");
 
+        //TO DO: receive an object here
         String username = response.getAsString("username");
         User user = userService.findUserByUsername(username);
         String dateString = response.getAsString("date");
@@ -86,9 +87,9 @@ public class loggerController {
         
         dietRecordService.createDietRecord(myDr);
         
-
-
         
     }
+
+    
 
 }
