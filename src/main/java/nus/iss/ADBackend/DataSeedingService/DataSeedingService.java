@@ -283,11 +283,11 @@ public class DataSeedingService {
 				"Squeeze out the liquid from the rehydrated wakame seaweed and cucumbers. Add them to the bowl with the dressing and toss it all together. ",
 				"Keep in an airtight container and store in the refrigerator for up to 2-3 days. However, it's possible that the cucumber releases more moisture and the sauce may get diluted. Enjoy it soon!" };
 		String name5 = "Japanese Cucumber Salad";
-		seedDishAndRecipe(name1, weights1, Ingredients1, procedures1, "recipe1.jpg", 3);
-		seedDishAndRecipe(name2, weights2, Ingredients2, procedures2, "recipe2.jpg", 3);
-		seedDishAndRecipe(name3, weights3, Ingredients3, procedures3, "recipe3.jpg", 2);
-		seedDishAndRecipe(name4, weights4, Ingredients4, procedures4, "recipe4.jpg", 4);
-		seedDishAndRecipe(name5, weights5, Ingredients5, procedures5, "recipe5.jpg", 4);
+		seedDishAndRecipe(name1, weights1, Ingredients1, procedures1, "/asset/images/recipe1.jpg", 3);
+		seedDishAndRecipe(name2, weights2, Ingredients2, procedures2, "/asset/images/recipe2.jpg", 3);
+		seedDishAndRecipe(name3, weights3, Ingredients3, procedures3, "/asset/images/recipe3.jpg", 2);
+		seedDishAndRecipe(name4, weights4, Ingredients4, procedures4, "/asset/images/recipe4.jpg", 4);
+		seedDishAndRecipe(name5, weights5, Ingredients5, procedures5, "/asset/images/recipe5.jpg", 4);
 	}
 
 	public void launchSeeding() throws IOException {
