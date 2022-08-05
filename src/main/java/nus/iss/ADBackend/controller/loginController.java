@@ -3,6 +3,7 @@ package nus.iss.ADBackend.controller;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,4 +29,8 @@ public class loginController {
 		return user;
 	}
 
+	@PostMapping ("/check")
+	public User authenticateUser(@RequestBody User user) {
+		return userService.findUserByUserNameAndPassword(user.getUsername(), user.getPassword());
+	}
 }

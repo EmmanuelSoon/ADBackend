@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nus.iss.ADBackend.Service.IngredientService;
+import nus.iss.ADBackend.Service.UserService;
 import nus.iss.ADBackend.helper.RecipeForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,8 @@ public class recipeController {
     private RecipeService recipeService;
     @Autowired
     private IngredientService ingredientService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/all")
     public List<Recipe> getStudents(){
@@ -85,5 +88,15 @@ public class recipeController {
             return new ResponseEntity<>(null, HttpStatus.CREATED);
         }
         return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
+    }
+    @PostMapping ("/checkuser")
+    public ResponseEntity<User> authenticateUser(@RequestBody User user) {
+        User u = userService.findUserByUserNameAndPassword(user.getUsername(), user.getPassword());
+        if(u != null) {
+            return ResponseEntity.ok(u);
+        }
+        else {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
     }
 }

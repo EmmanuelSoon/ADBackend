@@ -63,7 +63,7 @@ public class RecipeService {
 
     public boolean createRecipe(int userId, List<WeightedIngredient> weightedIngredients, List<String> steps, String dataUrl, int portion, String name){
         Recipe recipe = new Recipe();
-        User u = uRepo.findById(0);
+        User u = uRepo.findById(userId);
         List<Procedure> proceduresList = new ArrayList<>();
         for (int i = 0; i < steps.size(); i++) {
             Procedure p = new Procedure(i, steps.get(i), recipe);
