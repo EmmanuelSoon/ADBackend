@@ -46,10 +46,26 @@ public class Recipe {
         this.dateTime = dateTime;
     }
 
+    public void setIngredientList(List<WeightedIngredient> weightedIngredients){
+        this.ingredientList.clear();
+        if(weightedIngredients != null){
+            this.ingredientList.retainAll(weightedIngredients);
+            this.ingredientList.addAll(weightedIngredients);
+        }
+    }
+
+    public void setProcedures(List<Procedure> procedures){
+        this.procedures.clear();
+        if(procedures != null){
+            this.procedures.retainAll(procedures);
+            this.procedures.addAll(procedures);
+        }
+    }
+
     public double getTotalCalories() {
         double total = 0.0;
         for (WeightedIngredient weightedIngredient : ingredientList) {
-            total += weightedIngredient.getCalorie()/100.0;
+            total += weightedIngredient.getCalorie();
         }
         return total;
     }
@@ -60,5 +76,9 @@ public class Recipe {
         else {
             return nutritionRecord;
         }
+    }
+
+    public double getCalPerServing(){
+        return getTotalCalories()/portion;
     }
 }

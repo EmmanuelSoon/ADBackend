@@ -63,7 +63,7 @@ public class RecipeService {
 
     public boolean createRecipe(int userId, List<WeightedIngredient> weightedIngredients, List<String> steps, String dataUrl, int portion, String name){
         Recipe recipe = new Recipe();
-        User u = uRepo.findById(0);
+        User u = uRepo.findById(userId);
         List<Procedure> proceduresList = new ArrayList<>();
         for (int i = 0; i < steps.size(); i++) {
             Procedure p = new Procedure(i, steps.get(i), recipe);
@@ -83,5 +83,25 @@ public class RecipeService {
 
     public Recipe findRecipeById(int id){
         return rRepo.findById(id);
+    }
+
+    public boolean editRecipe(int userId, List<WeightedIngredient> weightedIngredients, List<String> steps, String dataUrl, int portion, String name, Recipe editedRecipe){
+        User u = uRepo.findById(userId);
+        List<Procedure> proceduresList = new ArrayList<>();
+        for (int i = 0; i < steps.size(); i++) {
+            Procedure p = new Procedure(i, steps.get(i), editedRecipe);
+            proceduresList.add(p);
+        }
+        
+        editedRecipe.setProcedures(proceduresList);
+        editedRecipe.setIngredientList(weightedIngredients);
+        editedRecipe.setUser(u);
+        editedRecipe.setDateTime(LocalDateTime.now());
+        editedRecipe.setImage(dataUrl);
+        editedRecipe.setNutritionRecord(new DataSeedingService().createNutritionRecordByList(weightedIngredients));
+        editedRecipe.setPortion(portion);
+        editedRecipe.setName(name);
+        rRepo.saveAndFlush(editedRecipe);
+        return true;
     }
 }
