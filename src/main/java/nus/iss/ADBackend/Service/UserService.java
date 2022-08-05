@@ -5,6 +5,11 @@ import nus.iss.ADBackend.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.nio.charset.StandardCharsets;
+import java.math.BigInteger;
+
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -124,5 +129,32 @@ public class UserService {
 
     public User findUserByUsername(String username){
         return uRepo.findByUsername(username);
+    }
+
+    public User checkHashedUser(int userId, String userHash, String passHash){
+        User user = uRepo.findById(userId);
+        if(hashing(user.getUsername()).equals(userHash) && hashing(user.getPassword()).equals(passHash)){
+            return user;
+        }
+        else{
+            return null;
+        }
+        
+    }
+
+    private String hashing(String text) {
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        // Change this to UTF-16 if needed
+        md.update(text.getBytes(StandardCharsets.UTF_8));
+        byte[] digest = md.digest();
+
+        String hex = String.format("%064x", new BigInteger(1, digest));
+        return hex;
     }
 }
