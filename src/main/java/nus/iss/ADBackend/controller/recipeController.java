@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import net.minidev.json.JSONObject;
 import nus.iss.ADBackend.Service.RecipeService;
 import nus.iss.ADBackend.model.*;;
 
@@ -89,10 +90,27 @@ public class recipeController {
         }
         return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
     }
+
     @PostMapping ("/checkuser")
     public ResponseEntity<User> authenticateUser(@RequestBody User user) {
         User u = userService.findUserByUserNameAndPassword(user.getUsername(), user.getPassword());
         if(u != null) {
+            return ResponseEntity.ok(u);
+        }
+        else {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    @PostMapping("/android")
+    public ResponseEntity<User> androidCheckUser(@RequestBody JSONObject userInput){
+        String userHash = userInput.getAsString("userhash");
+        String passHash = userInput.getAsString("passhash");
+        int userId = Integer.parseInt(userInput.getAsString("userid"));
+        User u = userService.checkHashedUser(userId, userHash, passHash);
+        if(u != null) {
+            System.out.println("testing hash ok");
             return ResponseEntity.ok(u);
         }
         else {
