@@ -56,8 +56,8 @@ public class loggerController {
     public List<DietRecord> getDietRecords(@RequestBody JSONObject response) throws IOException, ParseException{
         String username = response.getAsString("username");
         String dateString = response.getAsString("date");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate date = LocalDate.parse(dateString, formatter);
+       // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate date = LocalDate.parse(dateString);
         // System.out.println((username));
         
 
