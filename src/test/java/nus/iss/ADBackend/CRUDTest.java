@@ -102,7 +102,7 @@ public class CRUDTest {
     }
 
     private Recipe createRecipeByUserAndDish(User user, Dish dish, LocalDateTime time, String stpes) {
-        Recipe r = new Recipe("imagetestpath", user, dish, time, stpes);
+        Recipe r = new Recipe("imagetestpath", user, dish, time);
         rRepo.saveAndFlush(r);
         return rRepo.findByUserIdAndAndDateTime(user.getId(), time);
     }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -90,6 +91,40 @@ public class loggerController {
         
     }
 
+    
+    @RequestMapping("/getmealrecords")
+    public List<DietRecord> getMealRecords(@RequestBody JSONObject response) throws IOException, ParseException{
+        String username = response.getAsString("username");
+        String dateString = response.getAsString("date");
+        String mealString = response.getAsString("meal");
+       // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate date = LocalDate.parse(dateString);
+        // System.out.println((username));
+        MealType mealType = convertMealType(mealString);
+
+        User curr = userService.findUserByUsername(username);
+        List<DietRecord> dList = new ArrayList<>();
+        dList = dietRecordService.findByUserIdAndDate(curr.getId(), date);
+
+        return dList.stream().filter(d -> d.getMealType().equals(mealType)).collect(Collectors.toList());
+    }
+
+    private MealType convertMealType(String meal){
+        switch(meal){
+            case "breakfast":
+                return MealType.BREAKFAST;
+                
+            case "lunch":
+                return MealType.LUNCH;
+            
+            case "dinner":
+                return MealType.DINNER;
+                
+            case "extras":
+                return MealType.EXTRA;
+        }
+        return null;
+    }
     
 
 }
