@@ -39,7 +39,7 @@ public class loggerController {
     HealthRecordService hrService;
     
 
-    @RequestMapping("/gethealthrecords")
+    @RequestMapping("/gethealthrecorddate")
     public HealthRecord getHealthRecord(@RequestBody JSONObject response) throws IOException, ParseException{
         String username = response.getAsString("username");
         String dateString = response.getAsString("date");
@@ -47,8 +47,18 @@ public class loggerController {
 
         User curr = userService.findUserByUsername(username); 
         HealthRecord myHr = hrService.createHealthRecordIfAbsent(curr.getId(), date);
-        System.out.println(myHr);
+
         return myHr;
+    }
+
+    @RequestMapping("/gethealthrecords")
+    public List<HealthRecord> getAllHealthRecord(@RequestBody JSONObject response) throws IOException, ParseException{
+        String username = response.getAsString("username");
+        User curr = userService.findUserByUsername(username); 
+        List<HealthRecord> hrList = hrService.findAllHealthRecordsByUserId(curr.getId());
+        System.out.println(hrList);
+
+        return hrList;
     }
 
     @RequestMapping("/getdietrecords")
@@ -72,7 +82,7 @@ public class loggerController {
     public void addDietRecord (@RequestBody JSONObject response) throws IOException, ParseException{
         System.out.println("in add diet record");
 
-        //TO DO: receive an object here
+        //TO DO: receive an object here instead
         String username = response.getAsString("username");
         User user = userService.findUserByUsername(username);
         String dateString = response.getAsString("date");

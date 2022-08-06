@@ -13,7 +13,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface HealthRecordRepository extends JpaRepository<HealthRecord, Integer> {
 
-    @Query("Select hr from HealthRecord hr where hr.user.id = ?1")
+    @Query("Select hr from HealthRecord hr where hr.user.id = ?1 order by hr.date desc")
     List<HealthRecord> findByUserId(int userId);
     HealthRecord findById(int Id);
     @Transactional
