@@ -34,6 +34,7 @@ public class HealthRecordService {
         return hrRepo.findByUserIdAndAndDate(userId, date);
     }
     
+    //should only have 1 HR per day?
     public List<HealthRecord> findHealthRecordListByUserIdAndDate(int userId, LocalDate date) {
         return hrRepo.findListByUserIdAndAndDate(userId, date);
     }
