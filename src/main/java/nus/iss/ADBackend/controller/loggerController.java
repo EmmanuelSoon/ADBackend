@@ -57,7 +57,6 @@ public class loggerController {
         String username = response.getAsString("username");
         User curr = userService.findUserByUsername(username); 
         List<HealthRecord> hrList = hrService.findAllHealthRecordsByUserId(curr.getId());
-        System.out.println(hrList);
 
         return hrList;
     }
@@ -81,7 +80,7 @@ public class loggerController {
     @RequestMapping("/adddietrecord")
     @ResponseStatus(HttpStatus.OK)
     public void addDietRecord (@RequestBody JSONObject response) throws IOException, ParseException{
-        System.out.println("in add diet record");
+
 
         //TO DO: receive an object here instead
         String username = response.getAsString("username");
@@ -92,11 +91,14 @@ public class loggerController {
         String mealType = response.getAsString("mealType");
         double mealCals = Double.valueOf(response.getAsString("calories"));
         double weight = Double.valueOf(response.getAsString("weight"));
-
         DietRecord myDr = new DietRecord(date, user, mealName, MealType.valueOf(mealType), mealCals, weight);
         
+        //update health record
         dietRecordService.createDietRecord(myDr);
-        
+        double newCalTotal = dietRecordService.getTotalCaloriesByUserIdAndDate(user.getId(), date);
+        HealthRecord hr = hrService.createHealthRecordIfAbsent(user.getId(), date);
+        hr.setCalIntake(newCalTotal);
+        hrService.saveHealthRecord(hr);
         
     }
     
