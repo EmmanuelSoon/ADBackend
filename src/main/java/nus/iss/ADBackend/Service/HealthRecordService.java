@@ -56,4 +56,8 @@ public class HealthRecordService {
     public List<HealthRecord> findAllHealthRecordsByUserId(int userId) {
         return hrRepo.findByUserId(userId);
     }
+
+    public HealthRecord findHealthRecordById(int hrId){
+        return hrRepo.findById(hrId);
+    }
 }
