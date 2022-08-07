@@ -58,9 +58,11 @@ public class User {
 		this.username = username;
 		this.password = password;
 	}
-    public User(String username, String password, LocalDate dob, String gender, Goal goal){
-        this.username = username;
+    public User(String name, String username, String password, LocalDate dob, String gender, Goal goal){
+        this.name = name;
+    	this.username = username;
         this.password = password;
+        this.role = Role.NORMAL;
         this.dateofbirth = dob;
         this.gender = gender;
         this.goal = goal;

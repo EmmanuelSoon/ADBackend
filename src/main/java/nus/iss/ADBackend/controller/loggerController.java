@@ -22,6 +22,7 @@ import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
 import nus.iss.ADBackend.Service.DietRecordService;
 import nus.iss.ADBackend.Service.HealthRecordService;
+import nus.iss.ADBackend.Service.IngredientService;
 import nus.iss.ADBackend.Service.UserService;
 import nus.iss.ADBackend.model.*;
 import nus.iss.ADBackend.model.User;
@@ -38,6 +39,9 @@ public class loggerController {
 
     @Autowired
     HealthRecordService hrService;
+
+    @Autowired
+    IngredientService ingredientService;
     
 
     @RequestMapping("/gethealthrecorddate")
@@ -80,25 +84,33 @@ public class loggerController {
     @RequestMapping("/adddietrecord")
     @ResponseStatus(HttpStatus.OK)
     public void addDietRecord (@RequestBody JSONObject response) throws IOException, ParseException{
-
-
-        //TO DO: receive an object here instead
         String username = response.getAsString("username");
         User user = userService.findUserByUsername(username);
         String dateString = response.getAsString("date");
         LocalDate date = LocalDate.parse(dateString);
-        String mealName = response.getAsString("mealName");
         String mealType = response.getAsString("mealType");
-        double mealCals = Double.valueOf(response.getAsString("calories"));
-        double weight = Double.valueOf(response.getAsString("weight"));
-        DietRecord myDr = new DietRecord(date, user, mealName, MealType.valueOf(mealType), mealCals, weight);
+
+        response.remove("username");
+        response.remove("date");
+        response.remove("mealType");
+        Iterator<String> keys = response.keySet().iterator();
+        while(keys.hasNext()){
+            String key = keys.next();
+                Ingredient curr = ingredientService.findIngredientById(Integer.parseInt(key));
+                String mealName = curr.getName();
+                double weight = Double.valueOf(response.getAsString(key));
+                double mealCals = weight/100 * curr.getCalorie();
+
+                DietRecord myDr = new DietRecord(date, user, mealName, MealType.valueOf(mealType), mealCals, weight);
+                dietRecordService.createDietRecord(myDr);
+                double newCalTotal = dietRecordService.getTotalCaloriesByUserIdAndDate(user.getId(), date);
+                HealthRecord hr = hrService.createHealthRecordIfAbsent(user.getId(), date);
+                hr.setCalIntake(newCalTotal);
+                hrService.saveHealthRecord(hr);
+        }
+
+
         
-        //update health record
-        dietRecordService.createDietRecord(myDr);
-        double newCalTotal = dietRecordService.getTotalCaloriesByUserIdAndDate(user.getId(), date);
-        HealthRecord hr = hrService.createHealthRecordIfAbsent(user.getId(), date);
-        hr.setCalIntake(newCalTotal);
-        hrService.saveHealthRecord(hr);
         
     }
     
