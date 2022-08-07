@@ -29,14 +29,15 @@ public class registerController {
 
 		if (user == null) {
 			User newUser = new User(requestBody.getAsString("email"), requestBody.getAsString("password"));
+			String name = requestBody.getAsString("name");
+			newUser.setName(name);
+			String role = requestBody.getAsString("role");
+			newUser.setRole(getRole(role));
 			String dob = requestBody.getAsString("dob");
-			System.out.println(dob);
 			newUser.setDateofbirth(getDate(dob));
 			String gender = requestBody.getAsString("gender");
-			System.out.println(gender);
 			newUser.setGender(gender);
 			String goal = requestBody.getAsString("goal");
-			System.out.println(goal);
 			newUser.setGoal(getGoal(goal));
 
 			userService.createUser(newUser);
@@ -68,6 +69,16 @@ public class registerController {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		date = LocalDate.parse(dob, formatter);
 		return date;
+	}
+	
+	private Role getRole(String role) {
+		switch(role) {
+		case "NORMAL":
+			return Role.NORMAL;
+			
+		default:
+			return Role.NORMAL;
+		}
 	}
 
 	@RequestMapping("/updateUserDetails")

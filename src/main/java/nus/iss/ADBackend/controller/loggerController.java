@@ -61,7 +61,6 @@ public class loggerController {
         String username = response.getAsString("username");
         User curr = userService.findUserByUsername(username); 
         List<HealthRecord> hrList = hrService.findAllHealthRecordsByUserId(curr.getId());
-        System.out.println(hrList);
 
         return hrList;
     }
@@ -104,6 +103,10 @@ public class loggerController {
 
                 DietRecord myDr = new DietRecord(date, user, mealName, MealType.valueOf(mealType), mealCals, weight);
                 dietRecordService.createDietRecord(myDr);
+                double newCalTotal = dietRecordService.getTotalCaloriesByUserIdAndDate(user.getId(), date);
+                HealthRecord hr = hrService.createHealthRecordIfAbsent(user.getId(), date);
+                hr.setCalIntake(newCalTotal);
+                hrService.saveHealthRecord(hr);
         }
 
 
