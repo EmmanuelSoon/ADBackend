@@ -135,6 +135,17 @@ public class loggerController {
         }
         return null;
     }
+
+    @RequestMapping("/addwater")
+    public void addWater(@RequestBody JSONObject response) throws IOException, ParseException{
+        Integer hrId = (Integer) response.getAsNumber("hrID");
+        Double waterMils = response.getAsNumber("addMils").doubleValue();
+        HealthRecord myHr = hrService.findHealthRecordById(hrId);
+        waterMils = waterMils + myHr.getWaterIntake();
+        myHr.setWaterIntake(waterMils);
+        hrService.saveHealthRecord(myHr);
+
+    }
     
 
 }
