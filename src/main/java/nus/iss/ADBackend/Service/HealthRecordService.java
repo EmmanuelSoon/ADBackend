@@ -49,6 +49,7 @@ public class HealthRecordService {
             return null;
         }
         HealthRecord hr = new HealthRecord(u, date);
+        //hr.setUserWeight(-1.0);
         hrRepo.saveAndFlush(hr);
         return hr;
     }
@@ -60,4 +61,16 @@ public class HealthRecordService {
     public HealthRecord findHealthRecordById(int hrId){
         return hrRepo.findById(hrId);
     }
+
+    public void updateUserWeight(int userId, double weight, LocalDate date){
+        HealthRecord hr = findHealthRecordByUserIdAndDate(userId, date);
+        if (hr != null) {
+            hr.setUserWeight(weight);
+            hrRepo.saveAndFlush(hr);
+        }
+//        else{
+//            // throw the hr not found exception...
+//        }
+    }
+
 }
