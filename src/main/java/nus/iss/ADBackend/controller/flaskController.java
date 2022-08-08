@@ -11,12 +11,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.minidev.json.JSONObject;
 import nus.iss.ADBackend.Service.IngredientService;
+import nus.iss.ADBackend.Service.WrongPredictionService;
 import nus.iss.ADBackend.model.Ingredient;
 
 @RestController
@@ -25,6 +27,9 @@ public class flaskController {
 
 	@Autowired
 	private IngredientService ingredientService;
+
+	@Autowired
+	private WrongPredictionService wrongPredictionService;
 
 	@RequestMapping("/recieveImgFromAndroid")
 	public ResponseEntity<Object> recieveImgFromAndroid(@RequestBody byte[] imgByteArray) {
@@ -38,6 +43,25 @@ public class flaskController {
 		headers.add("Custom-Header", "foo");
 		return new ResponseEntity<Object>(ingredient, headers, HttpStatus.OK);
 
+	}
+
+	@RequestMapping("/oopsModelGotItWrong")
+	public ResponseEntity uploadingActualResultsFromUser(@RequestBody JSONObject response){
+		try {
+			String predicted = response.getAsString("predicted");
+			String actual = response.getAsString("actual");
+			String photoString = response.getAsString("photoString");
+			// Save object into DB 
+			// System.out.println("predicted: " + predicted);
+			// System.out.println("actual: " + actual);
+			wrongPredictionService.saveWrongPrediction(actual, predicted, photoString);
+			
+			return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
+
+		}
+		catch (Exception ex){
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	private String getPrediction(byte[] imgByteArray) {
