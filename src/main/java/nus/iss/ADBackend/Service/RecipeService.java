@@ -71,6 +71,13 @@ public class RecipeService {
             Procedure p = new Procedure(i, steps.get(i), recipe);
             proceduresList.add(p);
         }
+        String keywords = "";
+        for (int i = 0; i < weightedIngredients.size(); i++) {
+            if (i != 0) {
+                keywords += ",";
+            }
+            keywords += weightedIngredients.get(i).getIngredient().getName();
+        }
         recipe.setProcedures(proceduresList);
         recipe.setIngredientList(weightedIngredients);
         recipe.setUser(u);
@@ -79,6 +86,7 @@ public class RecipeService {
         recipe.setNutritionRecord(new DataSeedingService().createNutritionRecordByList(weightedIngredients));
         recipe.setPortion(portion);
         recipe.setName(name);
+        recipe.setSearchWords(keywords);
         rRepo.saveAndFlush(recipe);
         return true;
     }
@@ -94,7 +102,6 @@ public class RecipeService {
             Procedure p = new Procedure(i, steps.get(i), editedRecipe);
             proceduresList.add(p);
         }
-        
         editedRecipe.setProcedures(proceduresList);
         editedRecipe.setIngredientList(weightedIngredients);
         editedRecipe.setUser(u);

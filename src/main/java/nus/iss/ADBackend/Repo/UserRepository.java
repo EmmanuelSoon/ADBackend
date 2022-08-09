@@ -30,5 +30,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     List<User> findAllByType(Role role);
     @Query("select u from User u where u.goal = ?1")
     List<User> findAllByGoal(Goal goal);
+    Boolean existsBy();
 
 }
