@@ -18,15 +18,19 @@ public class WrongPrediction {
     private int id;
     private String actualIngredient;
     private String predictedIngredient;
-
+    private int status;
     @Column(length = Integer.MAX_VALUE)
     private String photoString; 
 
-    public WrongPrediction(String actualIngredient, String predictedIngredient, String photoString) {
+    
+
+    public WrongPrediction(String actualIngredient, String predictedIngredient, String photoString, int status) {
         super();
         this.actualIngredient = actualIngredient;
         this.predictedIngredient = predictedIngredient;
         this.photoString = photoString;
+        this.status = status;
+        
     }
 
 }

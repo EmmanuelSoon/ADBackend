@@ -54,7 +54,7 @@ public class flaskController {
 			// Save object into DB 
 			// System.out.println("predicted: " + predicted);
 			// System.out.println("actual: " + actual);
-			wrongPredictionService.saveWrongPrediction(actual, predicted, photoString);
+			wrongPredictionService.createWrongPrediction(actual, predicted, photoString);
 			
 			return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
 
