@@ -1,6 +1,7 @@
 package nus.iss.ADBackend.controller;
 
 import java.io.IOException;
+import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -108,11 +110,20 @@ public class loggerController {
                 hr.setCalIntake(newCalTotal);
                 hrService.saveHealthRecord(hr);
         }
-
-
-        
         
     }
+
+    @RequestMapping("/deletedietrecord")
+    public ResponseEntity<String> deleteDietRecord(@RequestBody JSONObject response) throws IOException, ParseException{
+        int drId = (Integer)response.getAsNumber("dietRecordId");
+        if(dietRecordService.deleteDietRecordById(drId)){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+    }
+
+
     
     @RequestMapping("/getmealrecords")
     public List<DietRecord> getMealRecords(@RequestBody JSONObject response) throws IOException, ParseException{
@@ -158,6 +169,8 @@ public class loggerController {
         hrService.saveHealthRecord(myHr);
 
     }
+
+
     
 
 }
