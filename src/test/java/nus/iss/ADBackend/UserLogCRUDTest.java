@@ -1,10 +1,5 @@
 package nus.iss.ADBackend;
 
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-
-import nus.iss.ADBackend.Repo.*;
-import nus.iss.ADBackend.model.*;
-
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -14,12 +9,28 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import nus.iss.ADBackend.Repo.DietRecordRepository;
+import nus.iss.ADBackend.Repo.HealthRecordRepository;
+import nus.iss.ADBackend.Repo.IngredientRepository;
+import nus.iss.ADBackend.Repo.RewardRepository;
+import nus.iss.ADBackend.Repo.UserRepository;
+import nus.iss.ADBackend.Repo.UserRewardRepository;
+import nus.iss.ADBackend.model.DietRecord;
+import nus.iss.ADBackend.model.HealthRecord;
+import nus.iss.ADBackend.model.Ingredient;
+import nus.iss.ADBackend.model.MealType;
+import nus.iss.ADBackend.model.Reward;
+import nus.iss.ADBackend.model.Role;
+import nus.iss.ADBackend.model.User;
+import nus.iss.ADBackend.model.UserReward;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class UserLogCRUDTest {
-    
-    @Autowired
+
+	@Autowired
 	UserRepository uRepo;
 
 	@Autowired
@@ -37,10 +48,10 @@ public class UserLogCRUDTest {
 	@Autowired
 	UserRewardRepository urRepo;
 
-    @Test
+	@Test
 	@Order(1)
 	void createUserTest() {
-		User user1 = new User("Henry", "user1", "pass1", Role.NORMAL);
+		User user1 = new User("Henry-test", "user1", "pass1", Role.NORMAL);
 		uRepo.saveAndFlush(user1);
 		User found = uRepo.findById(user1.getId());
 		Assertions.assertNotNull(found);
@@ -50,7 +61,7 @@ public class UserLogCRUDTest {
 	@Test
 	@Order(2)
 	void updateUserTest() {
-		User user2 = new User("Henrietta", "user2", "pass2", Role.NORMAL);
+		User user2 = new User("Henrietta-test", "user2", "pass2", Role.NORMAL);
 		Ingredient celery = new Ingredient("Celery", 100.0);
 		iRepo.saveAndFlush(celery);
 		List<Ingredient> myDislikes = user2.getDislike();
@@ -64,8 +75,8 @@ public class UserLogCRUDTest {
 
 	@Test
 	@Order(3)
-	void createDietRecordTest(){
-		User user1 = new User("Henry", "user1", "pass1", Role.NORMAL);
+	void createDietRecordTest() {
+		User user1 = new User("Henry-test", "user1", "pass1", Role.NORMAL);
 		uRepo.saveAndFlush(user1);
 		System.out.println("before:" + user1);
 		User usGot = uRepo.findByName("Henry");
@@ -80,8 +91,8 @@ public class UserLogCRUDTest {
 
 	@Test
 	@Order(4)
-	void updateDietRecordTest(){
-		User user1 = new User("Henry", "user1", "pass1", Role.NORMAL);
+	void updateDietRecordTest() {
+		User user1 = new User("Henry-test", "user1", "pass1", Role.NORMAL);
 		uRepo.saveAndFlush(user1);
 		DietRecord fd1 = new DietRecord(user1, "Chicken Rice", MealType.DINNER, 400.0, 250.0);
 		fdRepo.saveAndFlush(fd1);
@@ -95,8 +106,8 @@ public class UserLogCRUDTest {
 
 	@Test
 	@Order(5)
-	void deleteDietRecordTest(){
-		User user1 = new User("Henry", "user1", "pass1", Role.NORMAL);
+	void deleteDietRecordTest() {
+		User user1 = new User("Henry-test", "user1", "pass1", Role.NORMAL);
 		uRepo.saveAndFlush(user1);
 		DietRecord fd1 = new DietRecord(user1, "Chicken Rice", MealType.DINNER, 400.0, 250.0);
 		fdRepo.saveAndFlush(fd1);
@@ -109,8 +120,8 @@ public class UserLogCRUDTest {
 
 	@Test
 	@Order(6)
-	void createHealthRecordTest(){
-		User user2 = new User("Henrietta", "user2", "pass2", Role.NORMAL);
+	void createHealthRecordTest() {
+		User user2 = new User("Henrietta-test", "user2", "pass2", Role.NORMAL);
 		uRepo.saveAndFlush(user2);
 		HealthRecord hs1 = new HealthRecord(user2);
 		HealthRecord hs2 = new HealthRecord(user2, LocalDate.now().plusDays(1));
@@ -122,8 +133,8 @@ public class UserLogCRUDTest {
 
 	@Test
 	@Order(7)
-	void updateHealthRecordTest(){
-		User user2 = new User("Henrietta", "user2", "pass2", Role.NORMAL);
+	void updateHealthRecordTest() {
+		User user2 = new User("Henrietta-test", "user2", "pass2", Role.NORMAL);
 		uRepo.saveAndFlush(user2);
 		HealthRecord hs1 = new HealthRecord(user2);
 		hsRepo.saveAndFlush(hs1);
@@ -132,13 +143,13 @@ public class UserLogCRUDTest {
 		hsRepo.saveAndFlush(hs2);
 		HealthRecord hs3 = hsRepo.findById(hs1.getId());
 		Assertions.assertEquals(1500.0, hs3.getCalIntake());
-		
+
 	}
 
 	@Test
 	@Order(8)
-	void deleteHealthRecordTest(){
-		User user2 = new User("Henrietta", "user2", "pass2", Role.NORMAL);
+	void deleteHealthRecordTest() {
+		User user2 = new User("Henrietta-test", "user2", "pass2", Role.NORMAL);
 		uRepo.saveAndFlush(user2);
 		HealthRecord hs1 = new HealthRecord(user2);
 		hsRepo.saveAndFlush(hs1);
@@ -151,8 +162,8 @@ public class UserLogCRUDTest {
 
 	@Test
 	@Order(9)
-	void deleteUserTest(){
-		User user1 = new User("Henry", "user1", "pass1", Role.NORMAL);
+	void deleteUserTest() {
+		User user1 = new User("Henry-test", "user1", "pass1", Role.NORMAL);
 		uRepo.saveAndFlush(user1);
 		DietRecord fd1 = new DietRecord(user1, "Chicken Rice", MealType.DINNER, 400.0, 250.0);
 		fdRepo.saveAndFlush(fd1);
@@ -174,14 +185,14 @@ public class UserLogCRUDTest {
 		User userNull = uRepo.findById(user1.getId());
 		Assertions.assertNull(userNull);
 
-
 	}
 
 	@Test
 	@Order(10)
-	void CreateUserRewardTest(){
-		User user1 = new User("Henry", "user1", "pass1", Role.NORMAL);
-		Reward logOneWeek = new Reward("Three days in a row!", "You've logged your calories 3 days in a row, keep it up!");
+	void CreateUserRewardTest() {
+		User user1 = new User("Henry-test", "user1", "pass1", Role.NORMAL);
+		Reward logOneWeek = new Reward("Three days in a row!",
+				"You've logged your calories 3 days in a row, keep it up!");
 		uRepo.saveAndFlush(user1);
 		rRepo.saveAndFlush(logOneWeek);
 		urRepo.saveAndFlush(new UserReward(user1, logOneWeek));
@@ -192,10 +203,11 @@ public class UserLogCRUDTest {
 
 	@Test
 	@Order(11)
-	void deleteUserRewardTest(){
-		User user1 = new User("Henry", "user1", "pass1", Role.NORMAL);
-		User user2 = new User("Henrietta", "user2", "pass2", Role.NORMAL);
-		Reward logOneWeek = new Reward("Three days in a row!", "You've logged your calories 3 days in a row, keep it up!");
+	void deleteUserRewardTest() {
+		User user1 = new User("Henry-test", "user1", "pass1", Role.NORMAL);
+		User user2 = new User("Henrietta-test", "user2", "pass2", Role.NORMAL);
+		Reward logOneWeek = new Reward("Three days in a row!",
+				"You've logged your calories 3 days in a row, keep it up!");
 		uRepo.saveAndFlush(user1);
 		uRepo.saveAndFlush(user2);
 		rRepo.saveAndFlush(logOneWeek);
@@ -206,6 +218,6 @@ public class UserLogCRUDTest {
 		List<UserReward> urList = urRepo.findByRewardId(logOneWeek.getId());
 		System.out.println(urList);
 		Assertions.assertTrue(urList.isEmpty());
-		
+
 	}
 }
