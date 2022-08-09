@@ -40,6 +40,26 @@ public class DataSeedingService {
 	@Autowired
 	RecipeRepository rRepo;
 
+	List<Integer> ingredientIds = getIngredientList();
+
+	private List<Integer> getIngredientList(){
+		List<Integer> res = new ArrayList<>();
+		for (int i = 1; i <= 28; i++) {
+			res.add(i);
+		}
+		for (int i = 31; i <= 58; i++) {
+			res.add(i);
+		}
+		for (int i = 61; i <= 67; i++) {
+			if (i != 65) {
+				res.add(i);
+			}
+		}
+		for (int i = 73; i <= 101; i++) {
+			res.add(i);
+		}
+		return res;
+	}
 	public void seedIngredientFromCSV(String path) throws IOException {
 		Reader reader = new FileReader(path);
 		Iterable<CSVRecord> records = CSVFormat.EXCEL.withFirstRecordAsHeader().parse(reader);
@@ -99,19 +119,22 @@ public class DataSeedingService {
 	public void seedHealthAndDietRecordForHenry() {
 		Random rdn = new Random();
 		User u = uRepo.findByUsername("Henry@gmail.com");
-		List<Ingredient> ingredientList = iRepo.findAll();
+		//List<Ingredient> ingredientList = iRepo.findAll();
 		MealType[] meals = new MealType[] { MealType.BREAKFAST, MealType.LUNCH, MealType.DINNER, MealType.EXTRA };
 		LocalDate date = LocalDate.now();
 		// seed Diet Record
-		for (int i = 0; i < 7; i++) {
+		for (int i = 1; i < 7; i++) {
 			LocalDate currDate = date.minusDays(i);
 			double totalCals = 0.0;
 			for (int j = 0; j < 4; j++) {
-				Ingredient ingredient = ingredientList.get(rdn.nextInt(ingredientList.size()));
-				double weight = rdn.nextInt(500) + 150;
-				double cals = weight * ingredient.getCalorie() / 100.0;
-				totalCals += cals;
-				drRepo.saveAndFlush(new DietRecord(currDate, u, ingredient.getName(), meals[j], cals, weight));
+				int nums = rdn.nextInt(2)+ (rdn.nextInt(100) < 30 ? 1 : 0);
+				for (int k = 0; k <= nums; k++) {
+					Ingredient ingredient = iRepo.findById(ingredientIds.get(rdn.nextInt(ingredientIds.size()))).get();
+					double weight = rdn.nextInt(300)+100;
+					double cals = weight * ingredient.getCalorie() / 100.0;
+					totalCals += cals;
+					drRepo.saveAndFlush(new DietRecord(currDate, u, ingredient.getName(), meals[j], cals, weight));
+				}
 			}
 			hrRepo.saveAndFlush(new HealthRecord(currDate, 80 + rdn.nextDouble() * (rdn.nextInt(2) == 0 ? 1.0 : -1.0),
 					180.0, totalCals, 500 + rdn.nextInt(500), u));
@@ -154,6 +177,7 @@ public class DataSeedingService {
 		recipe.setNutritionRecord(createNutritionRecordByList(ingredientList));
 		recipe.setPortion(portion);
 		recipe.setName(name);
+		recipe.setSearchWords(keywords);
 		rRepo.saveAndFlush(recipe);
 	}
 
@@ -291,9 +315,11 @@ public class DataSeedingService {
 	}
 
 	public void launchSeeding() throws IOException {
-		seedUserFromCSV("./src/main/resources/data/userdata.csv");
-		seedIngredientFromCSV("./src/main/resources/data/data.csv");
-		seedHealthAndDietRecordForHenry();
-		seedDishAndRecipe();
+		if (!uRepo.existsBy()) {
+			seedUserFromCSV("./src/main/resources/data/userdata.csv");
+			seedIngredientFromCSV("./src/main/resources/data/data.csv");
+			seedHealthAndDietRecordForHenry();
+			seedDishAndRecipe();
+		}
 	}
 }
