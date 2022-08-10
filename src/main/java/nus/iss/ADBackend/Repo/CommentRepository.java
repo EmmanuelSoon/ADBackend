@@ -15,7 +15,7 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
     @Query("select c from Comment c where c.user.id = ?1 and c.dateTime = ?2")
     Comment findByUserIdAndDateTime(int id, LocalDateTime time);
-    @Query("select c from Comment c where c.recipe.id = ?1")
+    @Query("select c from Comment c where c.recipe.id = ?1 order by c.dateTime desc")
     List<Comment> findAllByRecipeId(int id);
     @Modifying
     @Query("delete from Comment c where c.recipe.id = ?1")
@@ -23,8 +23,7 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
     @Modifying
     @Query("delete from Comment c where c.id = ?1")
     void deleteById(int id);
-    @Query("select c from Comment  c where c.user.id = ?1")
+    @Query("select c from Comment  c where c.user.id = ?1 order by c.dateTime desc")
     List<Comment> findAllByUserId(int userId);
-
     Comment findById(int id);
 }

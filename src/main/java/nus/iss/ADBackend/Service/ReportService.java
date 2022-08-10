@@ -13,27 +13,26 @@ import java.util.List;
 public class ReportService {
     @Autowired
     ReportRepository rpRepo;
-
-    void createReport(Report report) {
+    public void createReport(Report report) {
         rpRepo.saveAndFlush(report);
     }
     @Transactional
-    boolean saveReport(Report report) {
+    public boolean saveReport(Report report) {
         if (rpRepo.findById(report.getId()) != null) {
             rpRepo.saveAndFlush(report);
             return true;
         }
         return false;
     }
-    List<Report> findAllPendingReports() {
+    public List<Report> findAllPendingReports() {
         return rpRepo.findReportByReportStatus(ReportStatus.SUBMITTED);
     }
 
-    List<Report>findAllReportByUserId(int id) {
+    public List<Report>findAllReportByUserId(int id) {
         return rpRepo.findReportByUserId(id);
     }
 
-    boolean deleteReportById(int id) {
+    public  boolean deleteReportById(int id) {
         if (rpRepo.findById(id) != null) {
             rpRepo.deleteById(id);
             return true;
