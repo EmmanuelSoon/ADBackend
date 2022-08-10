@@ -111,7 +111,7 @@ public class DataSeedingService {
 				double weight = rdn.nextInt(500) + 150;
 				double cals = weight * ingredient.getCalorie() / 100.0;
 				totalCals += cals;
-				drRepo.saveAndFlush(new DietRecord(currDate, u, ingredient.getName(), meals[j], cals, weight));
+				drRepo.saveAndFlush(new DietRecord(currDate, u, ingredient, meals[j], cals, weight));
 			}
 			hrRepo.saveAndFlush(new HealthRecord(currDate, 80 + rdn.nextDouble() * (rdn.nextInt(2) == 0 ? 1.0 : -1.0),
 					180.0, totalCals, 500 + rdn.nextInt(500), u));

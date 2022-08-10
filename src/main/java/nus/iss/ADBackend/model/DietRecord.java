@@ -2,6 +2,7 @@ package nus.iss.ADBackend.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.bytebuddy.description.field.FieldDescription.InGenericShape;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -15,7 +16,9 @@ public class DietRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private LocalDate date;
-    private String foodName;
+    @OneToOne
+    @JoinColumn(name = "ingredientId")
+    private Ingredient ingredient;
     private double calorie;
     private double weight;
     @Enumerated(EnumType.STRING)
@@ -24,9 +27,9 @@ public class DietRecord {
     @JoinColumn(name = "userId")
     private User user;
 
-    public DietRecord(User user, String foodName, MealType meal, Double calCount, Double weight) {
+    public DietRecord(User user, Ingredient ingredient, MealType meal, Double calCount, Double weight) {
         this.user = user;
-        this.foodName = foodName;
+        this.ingredient = ingredient;
         this.mealType = meal;
         this.calorie = calCount;
         this.weight = weight;
@@ -36,9 +39,9 @@ public class DietRecord {
         this.user = user;
         this.date = LocalDate.now();
     }
-    public DietRecord(LocalDate date, User user, String foodName, MealType meal, Double calCount, Double weight) {
+    public DietRecord(LocalDate date, User user, Ingredient ingredient, MealType meal, Double calCount, Double weight) {
         this.date = date;
-        this.foodName = foodName;
+        this.ingredient = ingredient;
         this.calorie =  calCount;
         this.weight = weight;
         this.mealType = meal;
