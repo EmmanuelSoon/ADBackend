@@ -1,5 +1,7 @@
 package nus.iss.ADBackend.controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.minidev.json.JSONObject;
+import nus.iss.ADBackend.Service.RecipeService;
 import nus.iss.ADBackend.Service.UserService;
 import nus.iss.ADBackend.Service.WrongPredictionService;
 import nus.iss.ADBackend.model.*;
@@ -27,6 +31,8 @@ public class adminController {
 
     @Autowired UserService userService;
 
+    @Autowired RecipeService recipeService;
+
     //GET METHODS 
 
     @GetMapping(value = "/wrongpredictlist")
@@ -38,6 +44,31 @@ public class adminController {
     @GetMapping(value = "/getusers")
     public List<User> getAllUsers(){
         return userService.findAllUsers();
+    }
+
+    @GetMapping(value = "/dashboard")
+    public ResponseEntity<JSONObject> getDashboardInformation(){
+        JSONObject obj = new JSONObject();
+
+        // gather info
+        int userCount = userService.findAllUsers() != null ? userService.findAllUsers().size() : 0;
+        int recipeCount = recipeService.getAllRecipes() != null ? recipeService.getAllRecipes().size() : 0;
+
+        int wpCount = wrongPredictionService.getAllWrongPredictions() != null ? wrongPredictionService.getAllWrongPredictions().size() : 0;
+        int pendingWpCount = wrongPredictionService.getPendingPrediction() != null ? wrongPredictionService.getPendingPrediction().size() : 0;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String databaseCreated = userService.findUserByUsername("official-user@gmail.com").getDateCreated().format(formatter);
+
+        // put in the information
+        obj.put("userCount", userCount);
+        obj.put("recipeCount", recipeCount);
+        obj.put("wpCount", wpCount);
+        obj.put("pendingWpCount", pendingWpCount);
+        obj.put("databaseCreated", databaseCreated);
+        obj.put("reportCount", 0);
+        obj.put("pendingReport", 0);
+
+        return new ResponseEntity<JSONObject>(obj, HttpStatus.OK);
     }
 
     // DELETE METHODS 

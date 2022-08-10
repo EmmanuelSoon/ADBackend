@@ -110,10 +110,6 @@ public class loggerController {
                 hr.setCalIntake(newCalTotal);
                 hrService.saveHealthRecord(hr);
         }
-
-
-        
-        
     }
     
     @RequestMapping("/getmealrecords")
