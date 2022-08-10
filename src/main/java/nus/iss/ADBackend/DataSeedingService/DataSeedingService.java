@@ -263,7 +263,7 @@ public class DataSeedingService {
 	}
 
 	public void seedDishAndRecipe() {
-		String[] Ingredients1 = new String[] { "Spaghetti", "Garlic", "Oil", "Chilli", "Salt", "Coriander Leaves" };
+		String[] Ingredients1 = new String[] { "Spaghetti", "Garlic", "Oil", "Chilli", "Salt", "Coriander Leaf" };
 		double[] weights1 = new double[] { 300, 30, 20, 5, 4, 16 };
 		String[] procedures1 = new String[] {
 				"Bring a large pot of lightly salted water to a boil. Cook spaghetti in the boiling water, stirring occasionally until cooked through but firm to the bite, about 12 minutes. Drain and transfer to a pasta bowl.",
