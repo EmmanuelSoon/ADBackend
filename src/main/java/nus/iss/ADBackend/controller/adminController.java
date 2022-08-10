@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import nus.iss.ADBackend.Service.UserService;
 import nus.iss.ADBackend.Service.WrongPredictionService;
-import nus.iss.ADBackend.model.WrongPrediction;
+import nus.iss.ADBackend.model.*;
 
 @RestController
 @RequestMapping(value= "/admin", produces = "application/json")
@@ -24,14 +25,24 @@ public class adminController {
     @Autowired
     private WrongPredictionService wrongPredictionService;
 
+    @Autowired UserService userService;
+
+    //GET METHODS 
+
     @GetMapping(value = "/wrongpredictlist")
     public List<WrongPrediction> getAllWrongPredictions(){
         return wrongPredictionService.getAllWrongPredictions();
     }
 
 
+    @GetMapping(value = "/getusers")
+    public List<User> getAllUsers(){
+        return userService.findAllUsers();
+    }
 
-    @DeleteMapping(value = "wrongpredictdelete/{id}")
+    // DELETE METHODS 
+
+    @DeleteMapping(value = "/wrongpredictdelete/{id}")
     public ResponseEntity deleteWrongPrediction(@PathVariable("id") int id){
         try {
             wrongPredictionService.deleteById(id);
@@ -42,11 +53,38 @@ public class adminController {
         }
     }
 
-    @PutMapping(value = "wrongpredictstatus/{id}")
+    @DeleteMapping(value = "/userdelete/{id}")
+    public ResponseEntity deleteUser(@PathVariable("id") int id){
+        try {
+            Boolean check = userService.deleteUserById(id);
+            if(check){
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }
+        catch (Exception ex){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }   
+
+
+    // PUT METHODS
+
+    @PutMapping(value = "/wrongpredictstatus/{id}")
     public List<WrongPrediction> changePredictionStatus(@PathVariable("id") int id){
         WrongPrediction wp = wrongPredictionService.findById(id);
         wp.setStatus(wp.getStatus() > 0 ? 0 : 1);
         wrongPredictionService.saveWrongPrediction(wp);
         return wrongPredictionService.getAllWrongPredictions();
+    }
+
+    @PutMapping(value = "/setuserrole/{id}")
+    public User changeUserRole(@PathVariable("id") int id){
+        User user = userService.findUserById(id);
+        user.setRole(user.getRole() == Role.NORMAL ? Role.ADMIN : Role.NORMAL);
+        userService.saveUser(user);
+        return user;
     }
 }
