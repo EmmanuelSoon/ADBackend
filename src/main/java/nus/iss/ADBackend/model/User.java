@@ -32,6 +32,7 @@ public class User {
 	private Double calorieintake_limit_inkcal;
 	private Double waterintake_limit_inml;
 	private LocalDate dateCreated = LocalDate.now();
+	private String activitylevel;
 
 	@OneToMany
 	private List<Ingredient> dislike = new ArrayList<>();

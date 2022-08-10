@@ -43,6 +43,7 @@ public class questionnaireController {
 		updatedUser.setCalorieintake_limit_inkcal(
 				Double.parseDouble(requestBody.getAsString("calorieintake_limit_inkcal")));
 		updatedUser.setWaterintake_limit_inml(Double.parseDouble(requestBody.getAsString("waterintake_limit_inml")));
+		updatedUser.setActivitylevel(requestBody.getAsString("activitylevel"));
 		updatedUser.setRole(Role.NORMAL);
 
 		HealthRecord myHr = new HealthRecord();
