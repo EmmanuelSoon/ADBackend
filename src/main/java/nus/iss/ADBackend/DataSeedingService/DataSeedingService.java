@@ -113,7 +113,9 @@ public class DataSeedingService {
 			u.setGender(record.get(5));
 			u.setCalorieintake_limit_inkcal(Double.parseDouble(record.get(6)));
 			u.setWaterintake_limit_inml(Double.parseDouble(record.get(7)));
+			u.setActivitylevel(record.get(8));
 			u.setGoal(getRandomGoal());
+			
 			list.add(u);
 		}
 		uRepo.saveAllAndFlush(list);

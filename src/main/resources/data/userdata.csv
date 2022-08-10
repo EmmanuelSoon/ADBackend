@@ -1,28 +1,28 @@
-﻿name,username,password,role,dateofbirth,gender,calorieintake_limit_inkcal,waterintake_limit_inml
-Henry,Henry@gmail.com,password,0,1987-10-25,M,2100,3100
-James,James@gmail.com,password,0,1990-10-15,M,2200,2500
-Robert,Robert@gmail.com,password,0,1991-10-15,M,2300,2700
-John,John@gmail.com,password,0,1994-10-25,M,2400,2200
-Michael,Michael@gmail.com,password,0,1995-09-11,M,2121,3700
-David,David@gmail.com,password,0,1996-10-15,M,3000,2900
-William,William@gmail.com,password,0,1997-01-25,M,2456,3100
-Richard,Richard@gmail.com,password,0,1987-10-25,M,2100,2500
-Joseph,Joseph@gmail.com,password,0,1990-10-15,M,2200,2700
-Thomas,Thomas@gmail.com,password,0,1991-10-15,M,2300,2200
-Charles,Charles@gmail.com,password,0,1994-10-25,M,2400,3700
-Christopher,Christopher@gmail.com,password,0,1995-09-11,M,2121,2900
-Daniel,Daniel@gmail.com,password,0,1996-10-15,M,3000,3100
-Matthew,Matthew@gmail.com,password,0,1997-01-25,M,2456,2500
-Anthony,Anthony@gmail.com,password,0,1987-10-25,M,2100,2700
-Mark,Mark@gmail.com,password,0,1990-10-15,M,2200,2200
-Donald,Donald@gmail.com,password,0,1991-10-15,M,2300,3700
-Steven,Steven@gmail.com,password,0,1994-10-25,M,2400,2900
-Paul,Paul@gmail.com,password,0,1995-09-11,M,2121,3100
-Andrew,Andrew@gmail.com,password,0,1996-10-15,M,3000,2500
-Joshua,Joshua@gmail.com,password,0,1997-01-25,M,2456,2700
-Kenneth,Kenneth@gmail.com,password,0,1987-10-25,M,2100,2200
-Kevin,Kevin@gmail.com,password,0,1990-10-15,M,2200,3700
-Brian,Brian@gmail.com,password,1,1991-10-15,M,2300,2900
-George,George@gmail.com,password,1,1994-10-25,M,2400,2200
-deleted-user,deleted-user@gmail.com,password,1,1995-09-11,M,2121,3700
-official-user,official-user@gmail.com,password,1,1996-10-15,M,3000,2900
+﻿name,username,password,role,dateofbirth,gender,calorieintake_limit_inkcal,waterintake_limit_inml,activitylevel
+Henry,Henry@gmail.com,password,0,1987-10-25,M,2100,3100,Lightly Active
+James,James@gmail.com,password,0,1990-10-15,M,2200,2500,Moderately Active
+Robert,Robert@gmail.com,password,0,1991-10-15,M,2300,2700,Very Active
+John,John@gmail.com,password,0,1994-10-25,M,2400,2200,Extra Active
+Michael,Michael@gmail.com,password,0,1995-09-11,M,2121,3700,Lightly Active
+David,David@gmail.com,password,0,1996-10-15,M,3000,2900,Moderately Active
+William,William@gmail.com,password,0,1997-01-25,M,2456,3100,Very Active
+Richard,Richard@gmail.com,password,0,1987-10-25,M,2100,2500,Extra Active
+Joseph,Joseph@gmail.com,password,0,1990-10-15,M,2200,2700,Lightly Active
+Thomas,Thomas@gmail.com,password,0,1991-10-15,M,2300,2200,Moderately Active
+Charles,Charles@gmail.com,password,0,1994-10-25,M,2400,3700,Very Active
+Christopher,Christopher@gmail.com,password,0,1995-09-11,M,2121,2900,Extra Active
+Daniel,Daniel@gmail.com,password,0,1996-10-15,M,3000,3100,Lightly Active
+Matthew,Matthew@gmail.com,password,0,1997-01-25,M,2456,2500,Moderately Active
+Anthony,Anthony@gmail.com,password,0,1987-10-25,M,2100,2700,Very Active
+Mark,Mark@gmail.com,password,0,1990-10-15,M,2200,2200,Extra Active
+Donald,Donald@gmail.com,password,0,1991-10-15,M,2300,3700,Lightly Active
+Steven,Steven@gmail.com,password,0,1994-10-25,M,2400,2900,Moderately Active
+Paul,Paul@gmail.com,password,0,1995-09-11,M,2121,3100,Very Active
+Andrew,Andrew@gmail.com,password,0,1996-10-15,M,3000,2500,Extra Active
+Joshua,Joshua@gmail.com,password,0,1997-01-25,M,2456,2700,Lightly Active
+Kenneth,Kenneth@gmail.com,password,0,1987-10-25,M,2100,2200,Moderately Active
+Kevin,Kevin@gmail.com,password,0,1990-10-15,M,2200,3700,Very Active
+Brian,Brian@gmail.com,password,1,1991-10-15,M,2300,2900,Extra Active
+George,George@gmail.com,password,1,1994-10-25,M,2400,2200,Lightly Active
+deleted-user,deleted-user@gmail.com,password,1,1995-09-11,M,2121,3700,Moderately Active
+official-user,official-user@gmail.com,password,1,1996-10-15,M,3000,2900,Very Active
