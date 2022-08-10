@@ -1,6 +1,7 @@
 package nus.iss.ADBackend.controller;
 
 import java.io.IOException;
+import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -109,7 +110,21 @@ public class loggerController {
                 hr.setCalIntake(newCalTotal);
                 hrService.saveHealthRecord(hr);
         }
+
+        
     }
+
+    @RequestMapping("/deletedietrecord")
+    public ResponseEntity<String> deleteDietRecord(@RequestBody JSONObject response) throws IOException, ParseException{
+        int drId = (Integer)response.getAsNumber("dietRecordId");
+        if(dietRecordService.deleteDietRecordById(drId)){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+    }
+
+
     
     @RequestMapping("/getmealrecords")
     public List<DietRecord> getMealRecords(@RequestBody JSONObject response) throws IOException, ParseException{
@@ -155,6 +170,7 @@ public class loggerController {
         hrService.saveHealthRecord(myHr);
 
     }
+
     @RequestMapping("/updateweight")
     public HttpEntity updateWeight(@RequestBody JSONObject response){
         try{
