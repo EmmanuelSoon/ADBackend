@@ -28,12 +28,11 @@ public class Recipe {
     private Dish dish = null;
     @Column(name = "createdOn")
     private LocalDateTime dateTime;
+    private String searchWords;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<WeightedIngredient> ingredientList = new ArrayList<>();
-
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Procedure> procedures = new ArrayList<>();
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "nutritionId")
     private NutritionRecord nutritionRecord;

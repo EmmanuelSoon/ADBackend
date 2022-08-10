@@ -25,7 +25,19 @@ public class Report {
     @JoinColumn(name = "recipeId")
     private Recipe recipe;
 
+    @Enumerated(EnumType.STRING)
+    private ReportCategory category;
+
     public Report(User user) {
         this.user = user;
+    }
+
+    public Report(String content, User user, Recipe recipe, ReportCategory category) {
+        this.content = content;
+        this.dateTime = LocalDateTime.now();
+        this.user = user;
+        this.status = ReportStatus.SUBMITTED;
+        this.recipe = recipe;
+        this.category = category;
     }
 }
