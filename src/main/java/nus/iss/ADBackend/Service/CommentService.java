@@ -17,10 +17,10 @@ public class CommentService {
     @Autowired
     CommentRepository cRepo;
 
-    void createComment(Comment comment) {
+    public void createComment(Comment comment) {
         cRepo.saveAndFlush(comment);
     }
-    boolean saveComment(Comment comment) {
+    public boolean saveComment(Comment comment) {
         if (cRepo.findById(comment.getId()) != null) {
             cRepo.saveAndFlush(comment);
             return true;
@@ -28,20 +28,20 @@ public class CommentService {
         return false;
     }
 
-    List<Comment> findCommentsByUserId(int id) {
+    public List<Comment> findCommentsByUserId(int id) {
         return cRepo.findAllByUserId(id);
     }
-    List<Comment> findCommentsByRecipeId(int recipeId) {
+    public List<Comment> findCommentsByRecipeId(int recipeId) {
         return cRepo.findAllByRecipeId(recipeId);
     }
-    Comment findCommentByID(int id) {
+    public Comment findCommentByID(int id) {
         return cRepo.findById(id);
     }
-    Comment findCommentByUserIdAndDateTime(int userId, LocalDateTime dateTime) {
+    public Comment findCommentByUserIdAndDateTime(int userId, LocalDateTime dateTime) {
         return cRepo.findByUserIdAndDateTime(userId, dateTime);
     }
     @Transactional
-    void deleteCommentById(int id) {
+    public void deleteCommentById(int id) {
         cRepo.deleteById(id);
     }
 }

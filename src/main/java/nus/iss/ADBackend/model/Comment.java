@@ -1,11 +1,13 @@
 package nus.iss.ADBackend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonTypeResolver;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Data
@@ -22,6 +24,7 @@ public class Comment {
     private LocalDateTime dateTime;
     @ManyToOne
     @JoinColumn(name = "recipeId")
+    @JsonIgnore
     private Recipe recipe;
 
     public Comment(double rating, String content, User user, LocalDateTime dateTime, Recipe recipe) {
@@ -30,5 +33,10 @@ public class Comment {
         this.user = user;
         this.dateTime = dateTime;
         this.recipe = recipe;
+    }
+
+    public String getTime(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy HH:mm");
+        return dateTime.format(formatter);
     }
 }

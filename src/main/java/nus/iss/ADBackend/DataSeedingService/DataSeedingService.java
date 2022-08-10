@@ -1,16 +1,5 @@
 package nus.iss.ADBackend.DataSeedingService;
 
-import nus.iss.ADBackend.Repo.*;
-import nus.iss.ADBackend.Service.UserService;
-import nus.iss.ADBackend.model.*;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVRecord;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.w3c.dom.ls.LSInput;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -21,12 +10,36 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-@Service
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import nus.iss.ADBackend.Repo.DietRecordRepository;
+import nus.iss.ADBackend.Repo.DishRepository;
+import nus.iss.ADBackend.Repo.HealthRecordRepository;
+import nus.iss.ADBackend.Repo.IngredientRepository;
+import nus.iss.ADBackend.Repo.NutritionRecordRepository;
+import nus.iss.ADBackend.Repo.RecipeRepository;
+import nus.iss.ADBackend.Repo.UserRepository;
+import nus.iss.ADBackend.model.DietRecord;
+import nus.iss.ADBackend.model.Dish;
+import nus.iss.ADBackend.model.Goal;
+import nus.iss.ADBackend.model.HealthRecord;
+import nus.iss.ADBackend.model.Ingredient;
+import nus.iss.ADBackend.model.MealType;
+import nus.iss.ADBackend.model.NutritionRecord;
+import nus.iss.ADBackend.model.Procedure;
+import nus.iss.ADBackend.model.Recipe;
+import nus.iss.ADBackend.model.Role;
+import nus.iss.ADBackend.model.User;
+import nus.iss.ADBackend.model.WeightedIngredient;
+
+@Component
 public class DataSeedingService {
 
 	@Autowired
 	DishRepository dRepo;
-
 	@Autowired
 	NutritionRecordRepository nRepo;
 	@Autowired
@@ -39,6 +52,27 @@ public class DataSeedingService {
 	HealthRecordRepository hrRepo;
 	@Autowired
 	RecipeRepository rRepo;
+
+	List<Integer> ingredientIds = getIngredientList();
+
+	private List<Integer> getIngredientList() {
+		List<Integer> res = new ArrayList<>();
+		for (int i = 1; i <= 28; i++) {
+			res.add(i);
+		}
+		for (int i = 31; i <= 58; i++) {
+			res.add(i);
+		}
+		for (int i = 61; i <= 67; i++) {
+			if (i != 65) {
+				res.add(i);
+			}
+		}
+		for (int i = 73; i <= 101; i++) {
+			res.add(i);
+		}
+		return res;
+	}
 
 	public void seedIngredientFromCSV(String path) throws IOException {
 		Reader reader = new FileReader(path);
@@ -79,7 +113,9 @@ public class DataSeedingService {
 			u.setGender(record.get(5));
 			u.setCalorieintake_limit_inkcal(Double.parseDouble(record.get(6)));
 			u.setWaterintake_limit_inml(Double.parseDouble(record.get(7)));
+			u.setActivitylevel(record.get(8));
 			u.setGoal(getRandomGoal());
+			
 			list.add(u);
 		}
 		uRepo.saveAllAndFlush(list);
@@ -99,19 +135,22 @@ public class DataSeedingService {
 	public void seedHealthAndDietRecordForHenry() {
 		Random rdn = new Random();
 		User u = uRepo.findByUsername("Henry@gmail.com");
-		List<Ingredient> ingredientList = iRepo.findAll();
+		// List<Ingredient> ingredientList = iRepo.findAll();
 		MealType[] meals = new MealType[] { MealType.BREAKFAST, MealType.LUNCH, MealType.DINNER, MealType.EXTRA };
 		LocalDate date = LocalDate.now();
 		// seed Diet Record
-		for (int i = 0; i < 7; i++) {
+		for (int i = 1; i < 7; i++) {
 			LocalDate currDate = date.minusDays(i);
 			double totalCals = 0.0;
 			for (int j = 0; j < 4; j++) {
-				Ingredient ingredient = ingredientList.get(rdn.nextInt(ingredientList.size()));
-				double weight = rdn.nextInt(500) + 150;
-				double cals = weight * ingredient.getCalorie() / 100.0;
-				totalCals += cals;
-				drRepo.saveAndFlush(new DietRecord(currDate, u, ingredient.getName(), meals[j], cals, weight));
+				int nums = rdn.nextInt(2) + (rdn.nextInt(100) < 30 ? 1 : 0);
+				for (int k = 0; k <= nums; k++) {
+					Ingredient ingredient = iRepo.findById(ingredientIds.get(rdn.nextInt(ingredientIds.size()))).get();
+					double weight = rdn.nextInt(300) + 100;
+					double cals = weight * ingredient.getCalorie() / 100.0;
+					totalCals += cals;
+					drRepo.saveAndFlush(new DietRecord(currDate, u, ingredient.getName(), meals[j], cals, weight));
+				}
 			}
 			hrRepo.saveAndFlush(new HealthRecord(currDate, 80 + rdn.nextDouble() * (rdn.nextInt(2) == 0 ? 1.0 : -1.0),
 					180.0, totalCals, 500 + rdn.nextInt(500), u));
@@ -154,6 +193,7 @@ public class DataSeedingService {
 		recipe.setNutritionRecord(createNutritionRecordByList(ingredientList));
 		recipe.setPortion(portion);
 		recipe.setName(name);
+		recipe.setSearchWords(keywords);
 		rRepo.saveAndFlush(recipe);
 	}
 
@@ -225,7 +265,7 @@ public class DataSeedingService {
 	}
 
 	public void seedDishAndRecipe() {
-		String[] Ingredients1 = new String[] { "Spaghetti", "Garlic", "Oil", "Chilli", "Salt", "Coriander Leaves" };
+		String[] Ingredients1 = new String[] { "Spaghetti", "Garlic", "Oil", "Chilli", "Salt", "Coriander Leaf" };
 		double[] weights1 = new double[] { 300, 30, 20, 5, 4, 16 };
 		String[] procedures1 = new String[] {
 				"Bring a large pot of lightly salted water to a boil. Cook spaghetti in the boiling water, stirring occasionally until cooked through but firm to the bite, about 12 minutes. Drain and transfer to a pasta bowl.",
@@ -291,9 +331,11 @@ public class DataSeedingService {
 	}
 
 	public void launchSeeding() throws IOException {
-		seedUserFromCSV("./src/main/resources/data/userdata.csv");
-		seedIngredientFromCSV("./src/main/resources/data/data.csv");
-		seedHealthAndDietRecordForHenry();
-		seedDishAndRecipe();
+		if (!uRepo.existsBy()) {
+			seedUserFromCSV("./src/main/resources/data/userdata.csv");
+			seedIngredientFromCSV("./src/main/resources/data/data.csv");
+			seedHealthAndDietRecordForHenry();
+			seedDishAndRecipe();
+		}
 	}
 }

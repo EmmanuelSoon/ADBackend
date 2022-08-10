@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +28,6 @@ import nus.iss.ADBackend.Service.HealthRecordService;
 import nus.iss.ADBackend.Service.IngredientService;
 import nus.iss.ADBackend.Service.UserService;
 import nus.iss.ADBackend.model.*;
-import nus.iss.ADBackend.model.User;
 
 @RestController
 @RequestMapping(value= "/user", produces = "application/json")
@@ -110,6 +110,7 @@ public class loggerController {
                 hr.setCalIntake(newCalTotal);
                 hrService.saveHealthRecord(hr);
         }
+
         
     }
 
@@ -170,7 +171,21 @@ public class loggerController {
 
     }
 
+    @RequestMapping("/updateweight")
+    public HttpEntity updateWeight(@RequestBody JSONObject response){
+        try{
+            String username = response.getAsString("username");
+            double weight = response.getAsNumber("weight").doubleValue();
+            String dateString = response.getAsString("date");
+            LocalDate date = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            int userId = userService.findUserByUsername(username).getId();
+            hrService.updateUserWeight(userId, weight, date);
+            return ResponseEntity.ok(null);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
+        }
 
-    
+    }
 
 }
