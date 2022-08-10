@@ -49,10 +49,55 @@ public class HealthRecordService {
             return null;
         }
         HealthRecord hr = new HealthRecord(u, date);
-        //hr.setUserWeight(-1.0);
+        setLatestWeight(hr);
+  
         hrRepo.saveAndFlush(hr);
         return hr;
     }
+    
+    public void setLatestWeight(HealthRecord hr) {
+
+    	LocalDate date = hr.getDate();
+    	LocalDate dateLimit = hr.getDate().minusDays(11);
+    	
+    	//try finding last 10 day weight
+    	try {
+    		while(hr.getUserWeight()==0) {
+    			if(date.equals(dateLimit)) {
+    				return;
+    			}
+    			else {
+    				date = date.minusDays(1);
+            		HealthRecord healthRecord = findHealthRecordByUserIdAndDate(hr.getUser().getId(), date);
+            		if(healthRecord != null) {
+            			hr.setUserWeight(healthRecord.getUserWeight());
+            		}	
+    			}
+    		}
+    	}catch(NullPointerException e) {
+    		System.out.println(e.getMessage());
+    	}
+    }
+
+    
+//    public double getLatestWeight(User user, LocalDate date) {
+//
+//    	HealthRecord healthRecord = new HealthRecord(user, date);
+//
+//    	double weight = healthRecord.getUserWeight();
+//    	LocalDate dateLimit = date.minusDays(7);
+//    	
+//    	while(weight == 0) {
+//    		if(!date.equals(dateLimit)) {
+//    			date = date.minusDays(1);
+//        		healthRecord = findHealthRecordByUserIdAndDate(user.getId(), date);
+//        		if(healthRecord != null) {
+//        			weight = healthRecord.getUserWeight();
+//        		}	
+//    		}   		
+//    	}
+//    	return weight;
+//    }
 
     public List<HealthRecord> findAllHealthRecordsByUserId(int userId) {
         return hrRepo.findByUserId(userId);

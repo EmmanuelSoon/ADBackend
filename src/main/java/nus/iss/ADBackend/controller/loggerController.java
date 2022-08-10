@@ -27,7 +27,6 @@ import nus.iss.ADBackend.Service.HealthRecordService;
 import nus.iss.ADBackend.Service.IngredientService;
 import nus.iss.ADBackend.Service.UserService;
 import nus.iss.ADBackend.model.*;
-import nus.iss.ADBackend.model.User;
 
 @RestController
 @RequestMapping(value= "/user", produces = "application/json")
