@@ -38,7 +38,7 @@ public class User {
 	private List<Ingredient> dislike = new ArrayList<>();
 
 	public User(String name, String username, String password, Role role, LocalDate dateofbirth, String gender,
-			Double calorieintake_limit_inkcal, Double waterintake_limit_inml) {
+			Double calorieintake_limit_inkcal, Double waterintake_limit_inml, LocalDate dateCreated) {
 		this.name = name;
 		this.username = username;
 		this.password = password;
@@ -47,6 +47,7 @@ public class User {
 		this.gender = gender;
 		this.calorieintake_limit_inkcal = calorieintake_limit_inkcal;
 		this.waterintake_limit_inml = waterintake_limit_inml;
+		this.dateCreated = dateCreated;
 	}
 
 	public User(String name, String username, String password, Role role) {
@@ -60,13 +61,14 @@ public class User {
 		this.username = username;
 		this.password = password;
 	}
-    public User(String name, String username, String password, LocalDate dob, String gender, Goal goal){
-        this.name = name;
-    	this.username = username;
-        this.password = password;
-        this.role = Role.NORMAL;
-        this.dateofbirth = dob;
-        this.gender = gender;
-        this.goal = goal;
-    }
+
+	public User(String name, String username, String password, LocalDate dob, String gender, Goal goal) {
+		this.name = name;
+		this.username = username;
+		this.password = password;
+		this.role = Role.NORMAL;
+		this.dateofbirth = dob;
+		this.gender = gender;
+		this.goal = goal;
+	}
 }

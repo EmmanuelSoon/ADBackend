@@ -117,5 +117,10 @@ public class HealthRecordService {
 //            // throw the hr not found exception...
 //        }
     }
+    
+    public HealthRecord findTopOneUserHealthRecord (int userId)
+    {
+    	return hrRepo.findTopOneUserHealthRecord(userId);
+    }
 
 }
