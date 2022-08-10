@@ -37,13 +37,14 @@ public class userProfileController {
 				Double.parseDouble(requestBody.getAsString("calorieintake_limit_inkcal")));
 		updatedUser.setWaterintake_limit_inml(Double.parseDouble(requestBody.getAsString("waterintake_limit_inml")));
 		updatedUser.setRole(Role.NORMAL);
-
-		if (userService.saveUser(updatedUser)) {
-			return userService.findUserByUserNameAndPassword(updatedUser.getUsername(), updatedUser.getPassword());
+		
+		if (userService.findUserByUsername(updatedUser.getUsername()) == null || userService.findUserByUsername(updatedUser.getUsername()).getId() == updatedUser.getId()) {
+			if (userService.saveUser(updatedUser)) {
+				return userService.findUserByUserNameAndPassword(updatedUser.getUsername(), updatedUser.getPassword());
+			}
 		}
 
 		return null;
-
 	}
 
 }
