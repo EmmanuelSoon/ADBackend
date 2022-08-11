@@ -152,7 +152,18 @@ public class adminController {
         else{
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
 
-
+    @PutMapping (value = "/recipechangeflag/{id}")
+    public ResponseEntity changeFlag(@PathVariable("id") int id){
+        Recipe recipe = recipeService.findRecipeById(id);
+        recipe.setFlagged(recipe.getFlagged() == false ? true:false);
+        boolean check = recipeService.saveRecipe(recipe);
+        if(check){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

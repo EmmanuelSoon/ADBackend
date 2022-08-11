@@ -36,6 +36,7 @@ public class Recipe {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "nutritionId")
     private NutritionRecord nutritionRecord;
+    private Boolean flagged = false;
 
     private int portion;
     public Recipe(String image, User user, Dish dish, LocalDateTime dateTime) {
