@@ -116,6 +116,21 @@ public class adminController {
         }
     }   
 
+    @DeleteMapping(value ="/report/{id}")
+    public ResponseEntity deleteReport(@PathVariable("id") int id){
+        try {
+            Boolean check = reportService.deleteReportById(id);
+            if(check){
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }
+        catch (Exception ex){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }  
 
     // PUT METHODS
 
