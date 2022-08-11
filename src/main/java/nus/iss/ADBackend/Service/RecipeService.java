@@ -118,5 +118,9 @@ public class RecipeService {
         return rRepo.searchRecipe(content.toLowerCase());
     }
 
+    public List<Recipe> getAllFlaggedRecipes(){
+        return rRepo.findAllFlaggedRecipes();
+    }
+
 
 }

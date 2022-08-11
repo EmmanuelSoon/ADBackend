@@ -60,6 +60,7 @@ public class adminController {
         // gather info
         int userCount = userService.findAllUsers() != null ? userService.findAllUsers().size() : 0;
         int recipeCount = recipeService.getAllRecipes() != null ? recipeService.getAllRecipes().size() : 0;
+        int flaggedCount = recipeService.getAllFlaggedRecipes() != null ? recipeService.getAllFlaggedRecipes().size() : 0; 
 
         int wpCount = wrongPredictionService.getAllWrongPredictions() != null ? wrongPredictionService.getAllWrongPredictions().size() : 0;
         int pendingWpCount = wrongPredictionService.getPendingPrediction() != null ? wrongPredictionService.getPendingPrediction().size() : 0;
@@ -77,6 +78,7 @@ public class adminController {
         obj.put("databaseCreated", databaseCreated);
         obj.put("reportCount", reportCount);
         obj.put("pendingReport", pendingReport);
+        obj.put("flaggedCount", flaggedCount);
 
         return new ResponseEntity<JSONObject>(obj, HttpStatus.OK);
     }
