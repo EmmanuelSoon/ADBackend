@@ -29,4 +29,7 @@ public interface HealthRecordRepository extends JpaRepository<HealthRecord, Inte
     
     @Query(value = "select  * from health_record where user_id = ?1 ORDER BY date desc LIMIT 1", nativeQuery = true )
     HealthRecord findTopOneUserHealthRecord (int userId);
+    
+    @Query(value = "select  * from health_record where user_id = ?1 ORDER BY date desc LIMIT 7", nativeQuery = true )
+    List<HealthRecord> getDailyFilterRecords(Integer userId);
 }

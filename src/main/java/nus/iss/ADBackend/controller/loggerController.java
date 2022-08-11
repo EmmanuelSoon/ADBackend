@@ -64,9 +64,20 @@ public class loggerController {
         UserCombinedData ucd = new UserCombinedData();
         String username = response.getAsString("username");
         String dateString = response.getAsString("date");
+        String graphFilter = response.getAsString("graphFilter");
         LocalDate date = LocalDate.parse(dateString);
         User curr = userService.findUserByUsername(username); 
-        List<HealthRecord> hrList = hrService.findAllHealthRecordsByUserId(curr.getId());
+		List<HealthRecord> hrList = new ArrayList<HealthRecord>();
+		        
+        if(graphFilter.equals("daily"))
+        {
+        	hrList = getDailyFilterRecords(curr.getId());
+        }
+//        else if (graphFilter.equals("weekly"))
+//        {
+//        	hrlist = getWeeklyFilterRecords(curr.getId());
+//        }
+//        List<HealthRecord> hrList = hrService.findAllHealthRecordsByUserId(curr.getId());
         List<DietRecord> dList = dietRecordService.findByUserIdAndDate(curr.getId(), date);
 
         ucd.setMyDietRecord(dList);
@@ -224,5 +235,18 @@ public class loggerController {
         }
 
     }
+    
+    
+    private List<HealthRecord> getDailyFilterRecords(Integer userId)
+    {
+    	
+    	return hrService.getDailyFilterRecords(userId);
+    }
+    
+//    private List<HealthRecord> getWeeklyFilterRecords(Integer userId)
+//    {
+//    	
+//    	return hrService.getWeeklyFilterRecords(userId);
+//    }
 
 }

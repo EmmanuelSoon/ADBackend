@@ -151,5 +151,10 @@ public class HealthRecordService {
     {
     	return hrRepo.findTopOneUserHealthRecord(userId);
     }
+    
+    public List<HealthRecord> getDailyFilterRecords(Integer userId)
+    {
+    	return hrRepo.getDailyFilterRecords(userId);
+    }
 
 }
