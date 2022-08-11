@@ -114,5 +114,9 @@ public class RecipeService {
         return true;
     }
 
+    public List<Recipe> findAllRecipesBySearch(String content) {
+        return rRepo.searchRecipe(content.toLowerCase());
+    }
+
 
 }
