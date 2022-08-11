@@ -135,7 +135,7 @@ public class DataSeedingService {
 	public void seedHealthAndDietRecordForHenry() {
 		Random rdn = new Random();
 		User u = uRepo.findByUsername("Henry@gmail.com");
-		// List<Ingredient> ingredientList = iRepo.findAll();
+		List<Ingredient> ingredientList = iRepo.findAll();
 		MealType[] meals = new MealType[] { MealType.BREAKFAST, MealType.LUNCH, MealType.DINNER, MealType.EXTRA };
 		LocalDate date = LocalDate.now();
 		// seed Diet Record
@@ -149,12 +149,14 @@ public class DataSeedingService {
 					double weight = rdn.nextInt(300) + 100;
 					double cals = weight * ingredient.getCalorie() / 100.0;
 					totalCals += cals;
-					drRepo.saveAndFlush(new DietRecord(currDate, u, ingredient.getName(), meals[j], cals, weight));
+				drRepo.saveAndFlush(new DietRecord(currDate, u, ingredient, meals[j], cals, weight));
 				}
 			}
 			hrRepo.saveAndFlush(new HealthRecord(currDate, 80 + rdn.nextDouble() * (rdn.nextInt(2) == 0 ? 1.0 : -1.0),
 					180.0, totalCals, 500 + rdn.nextInt(500), u));
+			
 		}
+		
 	}
 
 	public void seedDishAndRecipe(String name, double[] weights, String[] Ingredients, String[] procedures,

@@ -81,7 +81,7 @@ public class UserLogCRUDTest {
 		System.out.println("before:" + user1);
 		User usGot = uRepo.findByName("Henry");
 		System.out.println("After:" + usGot);
-		DietRecord fd1 = new DietRecord(usGot, "Chicken Rice", MealType.DINNER, 400.0, 250.0);
+		DietRecord fd1 = new DietRecord(usGot, new Ingredient("chicken rice"), MealType.DINNER, 400.0, 250.0);
 		fdRepo.saveAndFlush(fd1);
 		List<DietRecord> userFd = fdRepo.findByUserId(usGot.getId());
 
@@ -94,7 +94,7 @@ public class UserLogCRUDTest {
 	void updateDietRecordTest() {
 		User user1 = new User("Henry-test", "user1", "pass1", Role.NORMAL);
 		uRepo.saveAndFlush(user1);
-		DietRecord fd1 = new DietRecord(user1, "Chicken Rice", MealType.DINNER, 400.0, 250.0);
+		DietRecord fd1 = new DietRecord(user1, new Ingredient("chicken rice"), MealType.DINNER, 400.0, 250.0);
 		fdRepo.saveAndFlush(fd1);
 		DietRecord fd2 = fdRepo.findById(fd1.getId());
 		Assertions.assertNotNull(fd2);
@@ -109,7 +109,7 @@ public class UserLogCRUDTest {
 	void deleteDietRecordTest() {
 		User user1 = new User("Henry-test", "user1", "pass1", Role.NORMAL);
 		uRepo.saveAndFlush(user1);
-		DietRecord fd1 = new DietRecord(user1, "Chicken Rice", MealType.DINNER, 400.0, 250.0);
+		DietRecord fd1 = new DietRecord(user1, new Ingredient("Chicken Rice"), MealType.DINNER, 400.0, 250.0);
 		fdRepo.saveAndFlush(fd1);
 		DietRecord fd2 = fdRepo.findById(fd1.getId());
 		Assertions.assertNotNull(fd2);
@@ -165,7 +165,7 @@ public class UserLogCRUDTest {
 	void deleteUserTest() {
 		User user1 = new User("Henry-test", "user1", "pass1", Role.NORMAL);
 		uRepo.saveAndFlush(user1);
-		DietRecord fd1 = new DietRecord(user1, "Chicken Rice", MealType.DINNER, 400.0, 250.0);
+		DietRecord fd1 = new DietRecord(user1, new Ingredient("chicken rice"), MealType.DINNER, 400.0, 250.0);
 		fdRepo.saveAndFlush(fd1);
 		HealthRecord hs1 = new HealthRecord(user1);
 		hsRepo.saveAndFlush(hs1);
