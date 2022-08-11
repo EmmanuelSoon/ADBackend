@@ -190,6 +190,23 @@ public class loggerController {
         hrService.saveHealthRecord(myHr);
 
     }
+    
+    @RequestMapping("/updateheight")
+    public HttpEntity updateHeight(@RequestBody JSONObject response){
+        try{
+            String username = response.getAsString("username");
+            double height = response.getAsNumber("height").doubleValue();
+            String dateString = response.getAsString("date");
+            LocalDate date = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            int userId = userService.findUserByUsername(username).getId();
+            hrService.updateUserHeight(userId, height, date);
+            return ResponseEntity.ok(null);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
+        }
+
+    }
 
     @RequestMapping("/updateweight")
     public HttpEntity updateWeight(@RequestBody JSONObject response){

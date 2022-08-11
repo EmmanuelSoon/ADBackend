@@ -50,6 +50,7 @@ public class HealthRecordService {
         }
         HealthRecord hr = new HealthRecord(u, date);
         setLatestWeight(hr);
+        setLatestHeight(hr);
   
         hrRepo.saveAndFlush(hr);
         return hr;
@@ -76,6 +77,26 @@ public class HealthRecordService {
     		}
     	}catch(NullPointerException e) {
     		System.out.println(e.getMessage());
+    	}
+    }
+    
+    public void setLatestHeight(HealthRecord hr) {
+    	LocalDate date = hr.getDate();
+    	LocalDate dateLimit = hr.getUser().getDateCreated();
+    	
+    	//finding from user creation date
+    	
+    	while(hr.getUserHeight()==0) {
+    		if(date.isBefore(dateLimit)) {
+    			return;
+    		}
+    		else {
+    			date = date.minusDays(1);
+    			HealthRecord healthRecord = findHealthRecordByUserIdAndDate(hr.getUser().getId(), date);
+    			if(healthRecord != null) {
+    				hr.setUserHeight(healthRecord.getUserHeight());
+    			}
+    		}
     	}
     }
 
@@ -105,6 +126,14 @@ public class HealthRecordService {
 
     public HealthRecord findHealthRecordById(int hrId){
         return hrRepo.findById(hrId);
+    }
+    
+    public void updateUserHeight(int userId, double height, LocalDate date){
+        HealthRecord hr = findHealthRecordByUserIdAndDate(userId, date);
+        if (hr != null) {
+            hr.setUserHeight(height);
+            hrRepo.saveAndFlush(hr);
+        }
     }
 
     public void updateUserWeight(int userId, double weight, LocalDate date){
