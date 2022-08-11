@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.minidev.json.JSONObject;
@@ -182,6 +182,28 @@ public class adminController {
         }
         else{
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    // POST MAPPING
+    @PostMapping(value = "/login")
+    public ResponseEntity loginSetToken(@RequestBody User user){
+        try{
+            User curr = userService.findUserByUsername(user.getUsername());
+
+            if (curr != null && curr.getPassword().equals(user.getPassword()) && curr.getRole().equals(Role.ADMIN)){
+                JSONObject jsonObj = new JSONObject();
+                jsonObj.put("token", curr.getName());
+                return new ResponseEntity<>(jsonObj, HttpStatus.ACCEPTED);
+            }
+            else {                
+                JSONObject jsonObj = new JSONObject();
+                jsonObj.put("status", "fail");
+                return new ResponseEntity<>(jsonObj, HttpStatus.EXPECTATION_FAILED);
+            }
+        }
+    catch (Exception e){
+        return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
         }
     }
 }
