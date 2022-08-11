@@ -2,6 +2,7 @@ package nus.iss.ADBackend.controller;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,17 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.minidev.json.JSONObject;
 import nus.iss.ADBackend.Service.RecipeService;
+import nus.iss.ADBackend.Service.ReportService;
 import nus.iss.ADBackend.Service.UserService;
 import nus.iss.ADBackend.Service.WrongPredictionService;
+import nus.iss.ADBackend.helper.ActionsForm;
 import nus.iss.ADBackend.model.*;
 
 @RestController
@@ -32,6 +37,8 @@ public class adminController {
     @Autowired UserService userService;
 
     @Autowired RecipeService recipeService;
+
+    @Autowired ReportService reportService;
 
     //GET METHODS 
 
@@ -71,6 +78,15 @@ public class adminController {
         return new ResponseEntity<JSONObject>(obj, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/reports")
+    public List<Report> getAllReports(){
+        return reportService.findAllReports();
+    }
+    
+    @GetMapping(value = "/reports/{id}")
+    public Report getReportById(@PathVariable("id") int id){
+        return reportService.findReportById(id);
+    }
     // DELETE METHODS 
 
     @DeleteMapping(value = "/wrongpredictdelete/{id}")
@@ -117,5 +133,26 @@ public class adminController {
         user.setRole(user.getRole() == Role.NORMAL ? Role.ADMIN : Role.NORMAL);
         userService.saveUser(user);
         return user;
+    }
+
+    @PutMapping(value = "/report/addactions/{id}")
+    public ResponseEntity updateActions(@PathVariable("id") int reportId, @RequestBody ActionsForm actions){
+        Report curr = reportService.findReportById(reportId);
+        List<ReportAction> reportActions = new ArrayList<>();
+        for (String text : actions.getActions()){
+            ReportAction ra = new ReportAction(text);
+            reportActions.add(ra);
+        }
+        curr.setActionsTaken(reportActions);
+        curr.setStatus(ReportStatus.valueOf(actions.getStatus()));
+        Boolean check = reportService.saveReport(curr);
+        if(check){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+
     }
 }

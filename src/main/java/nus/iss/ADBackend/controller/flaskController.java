@@ -36,6 +36,10 @@ public class flaskController {
 		System.out.println(imgByteArray.toString());
 		String outputResponse = getPrediction(imgByteArray);
 		String predictedItemName = stringCleaner(outputResponse);
+		if(predictedItemName.equals("sweet potato leaf raw")){
+			predictedItemName = predictedItemName.replace(" raw", "");
+		}
+		System.out.println(predictedItemName);
 		Ingredient ingredient = ingredientService.findIngredientByName(predictedItemName);
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("outputResponse", ingredient);
