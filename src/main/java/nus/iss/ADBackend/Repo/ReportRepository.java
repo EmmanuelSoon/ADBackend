@@ -13,7 +13,7 @@ import java.util.List;
 public interface ReportRepository extends JpaRepository<Report, Integer> {
     @Query("select r from Report r where r.user.id = ?1")
     List<Report> findReportByUserId(int userId);
-    @Query("select r from Report r where r.status = ?1 order by r.dateTime")
+    @Query("select r from Report r where r.status != ?1 order by r.dateTime")
     List<Report> findReportByReportStatus(ReportStatus status);
     @Query("select r from Report r where r.recipe.id = ?1")
     List<Report> findReportByRecipeId(int recipeId);

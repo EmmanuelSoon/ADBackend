@@ -25,7 +25,7 @@ public class ReportService {
         return false;
     }
     public List<Report> findAllPendingReports() {
-        return rpRepo.findReportByReportStatus(ReportStatus.SUBMITTED);
+        return rpRepo.findReportByReportStatus(ReportStatus.COMPLETED);
     }
 
     public List<Report>findAllReportByUserId(int id) {

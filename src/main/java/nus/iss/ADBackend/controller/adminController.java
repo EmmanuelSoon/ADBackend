@@ -65,6 +65,9 @@ public class adminController {
         int pendingWpCount = wrongPredictionService.getPendingPrediction() != null ? wrongPredictionService.getPendingPrediction().size() : 0;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         String databaseCreated = userService.findUserByUsername("official-user@gmail.com").getDateCreated().format(formatter);
+        int reportCount = reportService.findAllReports() != null ? reportService.findAllReports().size() : 0;
+        int pendingReport = reportService.findAllPendingReports() != null ? reportService.findAllPendingReports().size() : 0;
+
 
         // put in the information
         obj.put("userCount", userCount);
@@ -72,8 +75,8 @@ public class adminController {
         obj.put("wpCount", wpCount);
         obj.put("pendingWpCount", pendingWpCount);
         obj.put("databaseCreated", databaseCreated);
-        obj.put("reportCount", 0);
-        obj.put("pendingReport", 0);
+        obj.put("reportCount", reportCount);
+        obj.put("pendingReport", pendingReport);
 
         return new ResponseEntity<JSONObject>(obj, HttpStatus.OK);
     }
