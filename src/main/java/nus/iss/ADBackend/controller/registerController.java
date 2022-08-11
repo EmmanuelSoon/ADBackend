@@ -60,7 +60,7 @@ public class registerController {
 			return Goal.WEIGHTGAIN;
 		case "WEIGHTMAINTAIN":
 			return Goal.WEIGHTMAINTAIN;
-		case "MUSCULE":
+		case "MUSCLE":
 			return Goal.MUSCLE;
 
 		// should not come to this default
