@@ -27,6 +27,6 @@ public interface HealthRecordRepository extends JpaRepository<HealthRecord, Inte
     @Query("Select hr from HealthRecord hr where hr.user.id = ?1 and hr.date = ?2")
     List<HealthRecord> findListByUserIdAndAndDate(int id, LocalDate date);
     
-    @Query(value = "select  * from dietdata.health_record where user_id = 1 ORDER BY date desc LIMIT 1", nativeQuery = true )
+    @Query(value = "select  * from health_record where user_id = ?1 ORDER BY date desc LIMIT 1", nativeQuery = true )
     HealthRecord findTopOneUserHealthRecord (int userId);
 }
