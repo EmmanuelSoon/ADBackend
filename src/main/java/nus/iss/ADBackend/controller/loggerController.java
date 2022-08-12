@@ -54,9 +54,15 @@ public class loggerController {
         LocalDate date = LocalDate.parse(dateString);
 
         User curr = userService.findUserByUsername(username); 
-        HealthRecord myHr = hrService.createHealthRecordIfAbsent(curr.getId(), date);
+        HealthRecord myHr = hrService.findHealthRecordByUserIdAndDate(curr.getId(), date);
 
-        return myHr;
+        if (myHr != null){
+            return myHr;
+        }
+        else {
+            return new HealthRecord(date, 0, 0, 0, 0, curr);
+        }
+
     }
 
     @RequestMapping("/getuserrecords")

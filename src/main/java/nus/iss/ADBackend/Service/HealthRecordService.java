@@ -108,7 +108,7 @@ public class HealthRecordService {
     }
 
     public void updateUserWeight(int userId, double weight, LocalDate date){
-        HealthRecord hr = findHealthRecordByUserIdAndDate(userId, date);
+        HealthRecord hr = createHealthRecordIfAbsent(userId, date);
         if (hr != null) {
             hr.setUserWeight(weight);
             hrRepo.saveAndFlush(hr);
