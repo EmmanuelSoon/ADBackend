@@ -49,56 +49,35 @@ public class HealthRecordService {
             return null;
         }
         HealthRecord hr = new HealthRecord(u, date);
-        setLatestWeight(hr);
-        setLatestHeight(hr);
+        //setLatestWeight(hr);
   
         hrRepo.saveAndFlush(hr);
         return hr;
     }
     
-    public void setLatestWeight(HealthRecord hr) {
+    //public void setLatestWeight(HealthRecord hr) {
 
-    	LocalDate date = hr.getDate();
-    	LocalDate dateLimit = hr.getDate().minusDays(11);
+    // 	LocalDate date = hr.getDate();
+    // 	LocalDate dateLimit = hr.getDate().minusDays(11);
     	
-    	//try finding last 10 day weight
-    	try {
-    		while(hr.getUserWeight()==0) {
-    			if(date.equals(dateLimit)) {
-    				return;
-    			}
-    			else {
-    				date = date.minusDays(1);
-            		HealthRecord healthRecord = findHealthRecordByUserIdAndDate(hr.getUser().getId(), date);
-            		if(healthRecord != null) {
-            			hr.setUserWeight(healthRecord.getUserWeight());
-            		}	
-    			}
-    		}
-    	}catch(NullPointerException e) {
-    		System.out.println(e.getMessage());
-    	}
-    }
-    
-    public void setLatestHeight(HealthRecord hr) {
-    	LocalDate date = hr.getDate();
-    	LocalDate dateLimit = hr.getUser().getDateCreated();
-    	
-    	//finding from user creation date
-    	
-    	while(hr.getUserHeight()==0) {
-    		if(date.isBefore(dateLimit)) {
-    			return;
-    		}
-    		else {
-    			date = date.minusDays(1);
-    			HealthRecord healthRecord = findHealthRecordByUserIdAndDate(hr.getUser().getId(), date);
-    			if(healthRecord != null) {
-    				hr.setUserHeight(healthRecord.getUserHeight());
-    			}
-    		}
-    	}
-    }
+    // 	//try finding last 10 day weight
+    // 	try {
+    // 		while(hr.getUserWeight()==0) {
+    // 			if(date.equals(dateLimit)) {
+    // 				return;
+    // 			}
+    // 			else {
+    // 				date = date.minusDays(1);
+    //         		HealthRecord healthRecord = findHealthRecordByUserIdAndDate(hr.getUser().getId(), date);
+    //         		if(healthRecord != null) {
+    //         			hr.setUserWeight(healthRecord.getUserWeight());
+    //         		}	
+    // 			}
+    // 		}
+    // 	}catch(NullPointerException e) {
+    // 		System.out.println(e.getMessage());
+    // 	}
+    // }
 
     
 //    public double getLatestWeight(User user, LocalDate date) {
@@ -151,7 +130,7 @@ public class HealthRecordService {
     {
     	return hrRepo.findTopOneUserHealthRecord(userId);
     }
-    
+
     public List<HealthRecord> getDailyFilterRecords(Integer userId)
     {
     	return hrRepo.getDailyFilterRecords(userId);

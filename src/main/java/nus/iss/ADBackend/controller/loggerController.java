@@ -80,6 +80,15 @@ public class loggerController {
 //        List<HealthRecord> hrList = hrService.findAllHealthRecordsByUserId(curr.getId());
         List<DietRecord> dList = dietRecordService.findByUserIdAndDate(curr.getId(), date);
 
+        //add new health record for the day
+        if (hrList.get(0).getDate().isBefore(LocalDate.now())){
+            HealthRecord newHr = hrService.createHealthRecordIfAbsent(curr.getId(), LocalDate.now());
+            newHr.setUserWeight(hrList.get(0).getUserWeight());
+            newHr.setUserHeight(hrList.get(0).getUserHeight());
+            hrService.saveHealthRecord(newHr);
+            hrList.add(0, newHr);
+        }
+
         ucd.setMyDietRecord(dList);
         ucd.setMyHrList(hrList);
 
