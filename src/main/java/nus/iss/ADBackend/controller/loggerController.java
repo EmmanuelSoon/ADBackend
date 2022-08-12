@@ -155,9 +155,40 @@ public class loggerController {
                 HealthRecord hr = hrService.createHealthRecordIfAbsent(user.getId(), date);
                 hr.setCalIntake(newCalTotal);
                 hrService.saveHealthRecord(hr);
-        }
+        } 
+    }
 
-        
+    @RequestMapping("/editdietrecord")
+    @ResponseStatus(HttpStatus.OK)
+    public void editDietRecord (@RequestBody JSONObject response) throws IOException, ParseException{
+        String username = response.getAsString("username");
+        User user = userService.findUserByUsername(username);
+        String dateString = response.getAsString("date");
+        LocalDate date = LocalDate.parse(dateString);
+        String mealType = response.getAsString("mealType");
+
+        List<DietRecord> dietRecords = dietRecordService.findByUserIdAndDate(user.getId(), date);
+        response.remove("username");
+        response.remove("date");
+        response.remove("mealType");
+        Iterator<String> keys = response.keySet().iterator();
+        while(keys.hasNext()){
+            String key = keys.next();
+                Ingredient curr = ingredientService.findIngredientById(Integer.parseInt(key));
+                double weight = Double.valueOf(response.getAsString(key));
+                double mealCals = weight/100 * curr.getCalorie();
+                for (DietRecord dr : dietRecords){
+                    if(dr.getIngredient().equals(curr)){
+                        dr.setWeight(weight);
+                        dr.setCalorie(mealCals);
+                        dietRecordService.saveDietRecord(dr);
+                    }
+                }
+        } 
+        double newCalTotal = dietRecordService.getTotalCaloriesByUserIdAndDate(user.getId(), date);
+        HealthRecord hr = hrService.createHealthRecordIfAbsent(user.getId(), date);
+        hr.setCalIntake(newCalTotal);
+        hrService.saveHealthRecord(hr);
     }
 
     @RequestMapping("/deletedietrecord")
