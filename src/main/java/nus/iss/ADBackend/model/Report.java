@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -27,6 +29,9 @@ public class Report {
 
     @Enumerated(EnumType.STRING)
     private ReportCategory category;
+
+    @OneToMany(cascade=CascadeType.ALL)
+    private List<ReportAction> actionsTaken = new ArrayList<>();
 
     public Report(User user) {
         this.user = user;

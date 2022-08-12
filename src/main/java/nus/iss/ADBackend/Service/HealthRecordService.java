@@ -55,7 +55,7 @@ public class HealthRecordService {
         return hr;
     }
     
-    // public void setLatestWeight(HealthRecord hr) {
+    //public void setLatestWeight(HealthRecord hr) {
 
     // 	LocalDate date = hr.getDate();
     // 	LocalDate dateLimit = hr.getDate().minusDays(11);
@@ -79,7 +79,25 @@ public class HealthRecordService {
     // 	}
     // }
 
-
+    
+//    public double getLatestWeight(User user, LocalDate date) {
+//
+//    	HealthRecord healthRecord = new HealthRecord(user, date);
+//
+//    	double weight = healthRecord.getUserWeight();
+//    	LocalDate dateLimit = date.minusDays(7);
+//    	
+//    	while(weight == 0) {
+//    		if(!date.equals(dateLimit)) {
+//    			date = date.minusDays(1);
+//        		healthRecord = findHealthRecordByUserIdAndDate(user.getId(), date);
+//        		if(healthRecord != null) {
+//        			weight = healthRecord.getUserWeight();
+//        		}	
+//    		}   		
+//    	}
+//    	return weight;
+//    }
 
     public List<HealthRecord> findAllHealthRecordsByUserId(int userId) {
         return hrRepo.findByUserId(userId);
@@ -87,6 +105,14 @@ public class HealthRecordService {
 
     public HealthRecord findHealthRecordById(int hrId){
         return hrRepo.findById(hrId);
+    }
+    
+    public void updateUserHeight(int userId, double height, LocalDate date){
+        HealthRecord hr = findHealthRecordByUserIdAndDate(userId, date);
+        if (hr != null) {
+            hr.setUserHeight(height);
+            hrRepo.saveAndFlush(hr);
+        }
     }
 
     public void updateUserWeight(int userId, double weight, LocalDate date){
@@ -103,6 +129,11 @@ public class HealthRecordService {
     public HealthRecord findTopOneUserHealthRecord (int userId)
     {
     	return hrRepo.findTopOneUserHealthRecord(userId);
+    }
+
+    public List<HealthRecord> getDailyFilterRecords(Integer userId)
+    {
+    	return hrRepo.getDailyFilterRecords(userId);
     }
 
 }

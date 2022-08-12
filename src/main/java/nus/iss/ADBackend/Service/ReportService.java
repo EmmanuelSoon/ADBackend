@@ -19,13 +19,13 @@ public class ReportService {
     @Transactional
     public boolean saveReport(Report report) {
         if (rpRepo.findById(report.getId()) != null) {
-            rpRepo.saveAndFlush(report);
+            rpRepo.save(report);
             return true;
         }
         return false;
     }
     public List<Report> findAllPendingReports() {
-        return rpRepo.findReportByReportStatus(ReportStatus.SUBMITTED);
+        return rpRepo.findReportByReportStatus(ReportStatus.COMPLETED);
     }
 
     public List<Report>findAllReportByUserId(int id) {
@@ -38,5 +38,13 @@ public class ReportService {
             return true;
         }
         return false;
+    }
+
+    public List<Report> findAllReports(){
+        return rpRepo.findAll();
+    }
+
+    public Report findReportById(int id){
+        return rpRepo.findById(id);
     }
 }

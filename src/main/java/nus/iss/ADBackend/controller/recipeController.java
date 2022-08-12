@@ -117,4 +117,13 @@ public class recipeController {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/search/{keyword}")
+    public List<Recipe> getRecipesBySearch(@PathVariable String keyword){
+        if (keyword == null || keyword.isEmpty()) {
+            return recipeService.getAllRecipes();
+        }
+        return recipeService.findAllRecipesBySearch(keyword);
+
+    }
 }

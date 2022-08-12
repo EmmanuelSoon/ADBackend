@@ -27,6 +27,11 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
     public void deleteByDishId(int dishId);
     @Query("select r from Recipe r where r.id = ?1")
     public Recipe findById(int id);
+    @Query("select distinct r from Recipe r where lower(r.name) like %?1% or lower(r.searchWords) like %?1%")
+    public List<Recipe> searchRecipe(String keyword);
+    @Query("select r from Recipe r where r.flagged = true")
+    public List<Recipe>findAllFlaggedRecipes();
+
 /*
     @Modifying(flushAutomatically = true)
     @Query("update Recipe r set r.user = ?2 where r.user.id = ?1")
