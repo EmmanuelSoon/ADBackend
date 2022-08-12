@@ -2,6 +2,7 @@ package nus.iss.ADBackend.Service;
 
 import nus.iss.ADBackend.Repo.HealthRecordRepository;
 import nus.iss.ADBackend.Repo.UserRepository;
+import nus.iss.ADBackend.helper.WeekMonthData;
 import nus.iss.ADBackend.model.HealthRecord;
 import nus.iss.ADBackend.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,6 +135,16 @@ public class HealthRecordService {
     public List<HealthRecord> getDailyFilterRecords(Integer userId)
     {
     	return hrRepo.getDailyFilterRecords(userId);
+    }
+    
+    public List<WeekMonthData> getWeeklyFilterRecords(Integer userId)
+    {
+    	return hrRepo.getWeeklyFilterRecords(userId);
+    }
+    
+    public List<WeekMonthData> getMonthlyFilterRecords(Integer userId)
+    {
+    	return hrRepo.getMonthlyFilterRecords(userId);
     }
 
 }
