@@ -210,11 +210,7 @@ public class loggerController {
         String username = response.getAsString("username");
         String dateString = response.getAsString("date");
         String mealString = response.getAsString("meal");
-       // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate date = LocalDate.parse(dateString);
-        // System.out.println((username));
-        MealType mealType = convertMealType(mealString);
-
         User curr = userService.findUserByUsername(username);
         List<DietRecord> dList = new ArrayList<>();
         dList = dietRecordService.findByUserIdAndDate(curr.getId(), date);
@@ -222,22 +218,7 @@ public class loggerController {
         return dList.stream().filter(d -> d.getMealType().equals(MealType.valueOf(mealString.toUpperCase()))).collect(Collectors.toList());
     }
 
-    private MealType convertMealType(String meal){
-        switch(meal){
-            case "breakfast":
-                return MealType.BREAKFAST;
-                
-            case "lunch":
-                return MealType.LUNCH;
-            
-            case "dinner":
-                return MealType.DINNER;
-                
-            case "extra":
-                return MealType.EXTRA;
-        }
-        return null;
-    }
+ 
 
     @RequestMapping("/addwater")
     public void addWater(@RequestBody JSONObject response) throws IOException, ParseException{
