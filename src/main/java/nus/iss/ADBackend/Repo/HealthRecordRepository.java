@@ -1,5 +1,6 @@
 package nus.iss.ADBackend.Repo;
 
+import nus.iss.ADBackend.helper.WeekMonthData;
 import nus.iss.ADBackend.model.HealthRecord;
 
 import java.time.LocalDate;
@@ -32,4 +33,12 @@ public interface HealthRecordRepository extends JpaRepository<HealthRecord, Inte
     
     @Query(value = "select  * from health_record where user_id = ?1 ORDER BY date desc LIMIT 7", nativeQuery = true )
     List<HealthRecord> getDailyFilterRecords(Integer userId);
+    
+    @Query(nativeQuery = true )
+    List<WeekMonthData> getWeeklyFilterRecords(Integer userId);
+    
+    @Query( nativeQuery = true )
+    List<WeekMonthData> getMonthlyFilterRecords(Integer userId);
+    
+    
 }

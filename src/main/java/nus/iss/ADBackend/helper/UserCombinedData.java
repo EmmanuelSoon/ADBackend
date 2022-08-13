@@ -12,7 +12,8 @@ import nus.iss.ADBackend.model.HealthRecord;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserCombinedData {
-
+	private List<WeekMonthData> weekList;
+	private List<WeekMonthData> monthList;
     private List<HealthRecord> myHrList;
     private List<DietRecord> myDietRecord;
 

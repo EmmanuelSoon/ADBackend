@@ -1,17 +1,12 @@
 package nus.iss.ADBackend.controller;
 
 import java.io.IOException;
-import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +16,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import net.minidev.json.JSONObject;
-import net.minidev.json.parser.JSONParser;
 import net.minidev.json.parser.ParseException;
 import nus.iss.ADBackend.Service.DietRecordService;
 import nus.iss.ADBackend.Service.HealthRecordService;
 import nus.iss.ADBackend.Service.IngredientService;
 import nus.iss.ADBackend.Service.UserService;
 import nus.iss.ADBackend.helper.UserCombinedData;
+import nus.iss.ADBackend.helper.WeekMonthData;
 import nus.iss.ADBackend.model.*;
 
 @RestController
@@ -74,16 +69,14 @@ public class loggerController {
         LocalDate date = LocalDate.parse(dateString);
         User curr = userService.findUserByUsername(username); 
 		List<HealthRecord> hrList = new ArrayList<HealthRecord>();
+		List<WeekMonthData> weekData = new ArrayList<WeekMonthData>();
+		List<WeekMonthData> monthData = new ArrayList<WeekMonthData>();
 		        
-        if(graphFilter.equals("daily"))
-        {
+
         	hrList = getDailyFilterRecords(curr.getId());
-        }
-//        else if (graphFilter.equals("weekly"))
-//        {
-//        	hrlist = getWeeklyFilterRecords(curr.getId());
-//        }
-//        List<HealthRecord> hrList = hrService.findAllHealthRecordsByUserId(curr.getId());
+        	weekData = getWeeklyFilterRecords(curr.getId());
+        	monthData = getMonthlyFilterRecords(curr.getId());
+        
         List<DietRecord> dList = dietRecordService.findByUserIdAndDate(curr.getId(), date);
 
         //add new health record for the day
@@ -95,6 +88,8 @@ public class loggerController {
             hrList.add(0, newHr);
         }
 
+        ucd.setWeekList(weekData);
+        ucd.setMonthList(monthData);
         ucd.setMyDietRecord(dList);
         ucd.setMyHrList(hrList);
 
@@ -296,10 +291,16 @@ public class loggerController {
     	return hrService.getDailyFilterRecords(userId);
     }
     
-//    private List<HealthRecord> getWeeklyFilterRecords(Integer userId)
-//    {
-//    	
-//    	return hrService.getWeeklyFilterRecords(userId);
-//    }
+    private List<WeekMonthData> getWeeklyFilterRecords(Integer userId)
+    {
+    	
+    	return hrService.getWeeklyFilterRecords(userId);
+    }
+    
+    private List<WeekMonthData> getMonthlyFilterRecords(Integer userId)
+    {
+    	
+    	return hrService.getMonthlyFilterRecords(userId);
+    }
 
 }
