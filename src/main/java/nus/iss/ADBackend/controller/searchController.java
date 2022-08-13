@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import net.minidev.json.JSONObject;
 import nus.iss.ADBackend.Service.IngredientService;
+import nus.iss.ADBackend.Service.RecipeService;
 import nus.iss.ADBackend.model.HealthRecord;
 import nus.iss.ADBackend.model.Ingredient;
+import nus.iss.ADBackend.model.Recipe;
 
 @RestController
 @RequestMapping(value= "/search", produces = "application/json")
@@ -22,6 +24,8 @@ public class searchController {
 
     @Autowired
     private IngredientService ingredientService;
+
+    @Autowired RecipeService recipeService;
 
 
     @RequestMapping("/ingredients")
@@ -36,7 +40,16 @@ public class searchController {
             iList = ingredientService.findSimilarIngredients(search);
         }
 
-        
         return iList;
+    }
+
+    @RequestMapping("/recipes")
+    public List<Recipe> getRecipeResults(@RequestBody JSONObject response) throws IOException, ParseException{
+        String search = response.getAsString("query");
+        List<Recipe> rList;
+        
+        rList = recipeService.findAllRecipesBySearch(search);
+
+        return rList;
     }
 }
