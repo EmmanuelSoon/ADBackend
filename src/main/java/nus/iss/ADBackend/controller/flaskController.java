@@ -39,7 +39,7 @@ public class flaskController {
 		if(predictedItemName.equals("sweet potato leaf raw")){
 			predictedItemName = predictedItemName.replace(" raw", "");
 		}
-		System.out.println(predictedItemName);
+		// System.out.println(predictedItemName);
 		Ingredient ingredient = ingredientService.findIngredientByName(predictedItemName);
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("outputResponse", ingredient);

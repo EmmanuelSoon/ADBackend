@@ -29,14 +29,12 @@ def compileModel():
 
 @app.route('/predict_api',methods=['POST'])
 def predict():
-    print('test')
     # Get the data from the POST request.
     data = request.get_data()
     # data = request.get_json(force=True) 
 
     # convert json string back into img   
     img = Image.open(io.BytesIO(data))
-    print(type(img))
     from numpy import asarray
 
     #resized = tf.image.resize(img,(260,260))
@@ -48,10 +46,7 @@ def predict():
     numpydata = np.expand_dims(numpydata, -1)
 
     # Make prediction using model loaded from disk as per the data.
-    pred = np.argmax(loaded_model.predict(numpydata))
-    print(np.sort(train['food categories'].unique()))  
-    print(np.sort(train['food categories'].unique())[pred])  
-      
+    pred = np.argmax(loaded_model.predict(numpydata))      
     return jsonify(np.sort(train['food categories'].unique())[pred])
     
     

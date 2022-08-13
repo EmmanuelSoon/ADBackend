@@ -232,7 +232,7 @@ public class loggerController {
     }
     
     @RequestMapping("/updateheight")
-    public HttpEntity updateHeight(@RequestBody JSONObject response){
+    public ResponseEntity updateHeight(@RequestBody JSONObject response){
         try{
             String username = response.getAsString("username");
             double height = response.getAsNumber("height").doubleValue();
@@ -240,7 +240,11 @@ public class loggerController {
             LocalDate date = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             int userId = userService.findUserByUsername(username).getId();
             hrService.updateUserHeight(userId, height, date);
-            return ResponseEntity.ok(null);
+
+            User curr = userService.findUserByUsername(username); 
+            HealthRecord myHr = hrService.findHealthRecordByUserIdAndDate(curr.getId(), date);
+
+            return ResponseEntity.ok(myHr);
         }
         catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
@@ -249,7 +253,7 @@ public class loggerController {
     }
 
     @RequestMapping("/updateweight")
-    public HttpEntity updateWeight(@RequestBody JSONObject response){
+    public ResponseEntity updateWeight(@RequestBody JSONObject response){
         try{
             String username = response.getAsString("username");
             double weight = response.getAsNumber("weight").doubleValue();
@@ -257,7 +261,10 @@ public class loggerController {
             LocalDate date = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             int userId = userService.findUserByUsername(username).getId();
             hrService.updateUserWeight(userId, weight, date);
-            return ResponseEntity.ok(null);
+
+            User curr = userService.findUserByUsername(username); 
+            HealthRecord myHr = hrService.findHealthRecordByUserIdAndDate(curr.getId(), date);
+            return ResponseEntity.ok(myHr);
         }
         catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
