@@ -52,8 +52,8 @@ public class loggerController {
         HealthRecord myHr = hrService.findHealthRecordByUserIdAndDate(curr.getId(), date);
 
         if (myHr != null){
-            return myHr;
-        }
+        return myHr;
+    }
         else {
             return new HealthRecord(date, 0, 0, 0, 0, curr);
         }
@@ -150,7 +150,7 @@ public class loggerController {
                 HealthRecord hr = hrService.createHealthRecordIfAbsent(user.getId(), date);
                 hr.setCalIntake(newCalTotal);
                 hrService.saveHealthRecord(hr);
-        } 
+        }
     }
 
     @RequestMapping("/editdietrecord")
@@ -161,7 +161,7 @@ public class loggerController {
         String dateString = response.getAsString("date");
         LocalDate date = LocalDate.parse(dateString);
         String mealType = response.getAsString("mealType");
-
+        
         List<DietRecord> dietRecords = dietRecordService.findByUserIdAndDate(user.getId(), date);
         response.remove("username");
         response.remove("date");
