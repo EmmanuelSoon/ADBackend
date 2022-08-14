@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import net.minidev.json.JSONObject;
 import nus.iss.ADBackend.Service.HealthRecordService;
 import nus.iss.ADBackend.Service.UserService;
+import nus.iss.ADBackend.helper.UserWithWeightHeight;
 import nus.iss.ADBackend.model.Goal;
 import nus.iss.ADBackend.model.HealthRecord;
 import nus.iss.ADBackend.model.Role;
@@ -23,14 +24,33 @@ import nus.iss.ADBackend.model.User;
 public class userProfileController {
 
 	private User updatedUser = new User();
+	UserWithWeightHeight userWithWeightHeight = new UserWithWeightHeight();
 	@Autowired
 	UserService userService;
 
 	@Autowired
 	HealthRecordService hRecService;
 
+	@RequestMapping("/getUserDetailswithHeightandWeight")
+	public UserWithWeightHeight getUserDetailswithHeightandWeight(@RequestBody JSONObject requestBody)
+			throws IOException, ParseException {
+
+		updatedUser.setId(Integer.parseInt(requestBody.getAsString("id")));
+
+		HealthRecord hrec = new HealthRecord();
+		hrec = hRecService.findTopOneUserHealthRecord(updatedUser.getId());
+		// Math.round(a * 100) / 100
+
+		userWithWeightHeight.setUser(userService.findUserById(updatedUser.getId()));
+		userWithWeightHeight.setUserHeight((double) Math.round(hrec.getUserHeight() * 100) / 100);
+		userWithWeightHeight.setUserWeight((double) Math.round(hrec.getUserWeight() * 100) / 100);
+
+		return userWithWeightHeight;
+	}
+
 	@RequestMapping("/updateUserDetails")
-	public User updateUserDetails(@RequestBody JSONObject requestBody) throws IOException, ParseException {
+	public UserWithWeightHeight updateUserDetails(@RequestBody JSONObject requestBody)
+			throws IOException, ParseException {
 
 		updatedUser.setId(Integer.parseInt(requestBody.getAsString("id")));
 		updatedUser.setName(requestBody.getAsString("name"));
@@ -40,10 +60,13 @@ public class userProfileController {
 		updatedUser.setGender(requestBody.getAsString("gender"));
 		updatedUser.setGoal(Goal.valueOf(requestBody.getAsString("goal")));
 		updatedUser.setActivitylevel(requestBody.getAsString("activitylevel"));
-//		updatedUser.setCalorieintake_limit_inkcal(
-//				Double.parseDouble(requestBody.getAsString("calorieintake_limit_inkcal")));
 		updatedUser.setWaterintake_limit_inml(Double.parseDouble(requestBody.getAsString("waterintake_limit_inml")));
 		updatedUser.setRole(Role.NORMAL);
+
+		hRecService.updateUserHeight(updatedUser.getId(), Double.parseDouble(requestBody.getAsString("userHeight")),
+				LocalDate.now());
+		hRecService.updateUserWeight(updatedUser.getId(), Double.parseDouble(requestBody.getAsString("userWeight")),
+				LocalDate.now());
 
 		HealthRecord hrec = new HealthRecord();
 		hrec = hRecService.findTopOneUserHealthRecord(updatedUser.getId());
@@ -55,7 +78,12 @@ public class userProfileController {
 		if (userService.findUserByUsername(updatedUser.getUsername()) == null
 				|| userService.findUserByUsername(updatedUser.getUsername()).getId() == updatedUser.getId()) {
 			if (userService.saveUser(updatedUser)) {
-				return userService.findUserByUserNameAndPassword(updatedUser.getUsername(), updatedUser.getPassword());
+				userWithWeightHeight.setUser(userService.findUserByUserNameAndPassword(updatedUser.getUsername(),
+						updatedUser.getPassword()));
+				userWithWeightHeight.setUserWeight(hrec.getUserWeight());
+				userWithWeightHeight.setUserHeight(hrec.getUserHeight());
+
+				return userWithWeightHeight;
 			}
 		}
 
@@ -66,13 +94,9 @@ public class userProfileController {
 		Double calculatedCalorie = 0.0;
 
 		if (gender.equals("M")) {
-			// 13.397W + 4.799H - 5.677A + 88.362
-			// new: 10 x weight (kg) + 6.25 x height (cm) – 5 x age (y) + 5 (kcal / day)
 			calculatedCalorie = (10 * Double.parseDouble(userWeight)) + (6.25 * Double.parseDouble(userHeight))
 					- (5 * calculateAge()) + 5;
 		} else if (gender.equals("F")) {
-			// 9.247W + 3.098H - 4.330A + 447.593
-			// new: 10 x weight (kg) + 6.25 x height (cm) – 5 x age (y) -161 (kcal / day)
 			calculatedCalorie = (10 * Double.parseDouble(userWeight)) + (6.25 * Double.parseDouble(userHeight))
 					- (5 * calculateAge()) - 161;
 		}
@@ -109,5 +133,4 @@ public class userProfileController {
 		LocalDate currDate = LocalDate.now();
 		return Period.between(updatedUser.getDateofbirth(), currDate).getYears();
 	}
-
 }
