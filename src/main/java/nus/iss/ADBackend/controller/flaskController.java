@@ -33,14 +33,17 @@ public class flaskController {
 
 	@RequestMapping("/recieveImgFromAndroid")
 	public ResponseEntity<Object> recieveImgFromAndroid(@RequestBody byte[] imgByteArray) {
-		System.out.println(imgByteArray.toString());
+		// System.out.println(imgByteArray.toString());
 		String outputResponse = getPrediction(imgByteArray);
 		String predictedItemName = stringCleaner(outputResponse);
+		predictedItemName = predictedItemName.replace("mandarin", "orange");
 		if(predictedItemName.equals("sweet potato leaf raw")){
 			predictedItemName = predictedItemName.replace(" raw", "");
 		}
-		// System.out.println(predictedItemName);
+		
+		System.out.println(predictedItemName);
 		Ingredient ingredient = ingredientService.findIngredientByName(predictedItemName);
+		// System.out.println(ingredient.getName());
 		JSONObject jsonObj = new JSONObject();
 		jsonObj.put("outputResponse", ingredient);
 		HttpHeaders headers = new HttpHeaders();
