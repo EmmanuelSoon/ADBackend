@@ -119,14 +119,14 @@ public class recipeController {
         }
     }
 
-    @GetMapping("/search/{keyword}/{calories}")
-    public List<Recipe> getRecipesBySearch(@PathVariable String keyword, @PathVariable int calories){
+    @GetMapping(value = {"/search/{keyword}/{calories}", "/search/{calories}"})
+    public List<Recipe> getRecipesBySearch(@PathVariable(required = false) String keyword, @PathVariable int calories){
         List<Recipe> res;
         if (keyword == null || keyword.isEmpty()) {
             res = recipeService.getAllRecipes();
         }
         else {
-            res = recipeService.findAllRecipesBySearch(keyword);
+            res = recipeService.findAllRecipesBySearch(keyword.trim());
         }
         return res.stream().filter(recipe -> recipe.getCalPerServing() <= calories).collect(Collectors.toList());
 
