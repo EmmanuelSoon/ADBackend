@@ -225,10 +225,9 @@ public class loggerController {
         Integer hrId = (Integer) response.getAsNumber("hrID");
         Double waterMils = response.getAsNumber("addMils").doubleValue();
         HealthRecord myHr = hrService.findHealthRecordById(hrId);
-        waterMils = waterMils + myHr.getWaterIntake();
+        waterMils = waterMils + myHr.getWaterIntake() > 0 ? waterMils + myHr.getWaterIntake() : 0;
         myHr.setWaterIntake(waterMils);
         hrService.saveHealthRecord(myHr);
-
     }
     
     @RequestMapping("/updateheight")
