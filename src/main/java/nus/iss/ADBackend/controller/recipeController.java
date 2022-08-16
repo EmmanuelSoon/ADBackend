@@ -2,6 +2,7 @@ package nus.iss.ADBackend.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import nus.iss.ADBackend.Service.IngredientService;
 import nus.iss.ADBackend.Service.UserService;
@@ -118,12 +119,16 @@ public class recipeController {
         }
     }
 
-    @GetMapping("/search/{keyword}")
-    public List<Recipe> getRecipesBySearch(@PathVariable String keyword){
+    @GetMapping(value = {"/search/{keyword}/{calories}", "/search/{calories}"})
+    public List<Recipe> getRecipesBySearch(@PathVariable(required = false) String keyword, @PathVariable int calories){
+        List<Recipe> res;
         if (keyword == null || keyword.isEmpty()) {
-            return recipeService.getAllRecipes();
+            res = recipeService.getAllRecipes();
         }
-        return recipeService.findAllRecipesBySearch(keyword);
+        else {
+            res = recipeService.findAllRecipesBySearch(keyword.trim());
+        }
+        return res.stream().filter(recipe -> recipe.getCalPerServing() <= calories).collect(Collectors.toList());
 
     }
 }
