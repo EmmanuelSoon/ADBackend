@@ -55,7 +55,7 @@ You may stop the docker compose through docker desktop.
 ## Android Application
 
 1. Open GetFitWithHenry android with Android Studio, we recommend to use **API 29** for the emulated android device.
-2. Nagivate to Constants.java file (App/Java/model/Constants.java)
+2. Nagivate to Constants.java file (App/Java/model/Constants.java) and update the ip address.
 ```java
 public class Constants {
     public static String javaURL = "${host}:8080";
@@ -66,4 +66,7 @@ public class Constants {
 | Parameter | Type     | Description                  |
 | :-------- | :------- | :-------------------------   |
 | `host`    | `string` | Your machine's IPv4 address. |
+
+3. Run android application.
+
 
