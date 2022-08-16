@@ -191,12 +191,24 @@ public class loggerController {
         HealthRecord hr = hrService.createHealthRecordIfAbsent(user.getId(), date);
         hr.setCalIntake(newCalTotal);
         hrService.saveHealthRecord(hr);
+        
     }
 
     @RequestMapping("/deletedietrecord")
     public ResponseEntity<String> deleteDietRecord(@RequestBody JSONObject response) throws IOException, ParseException{
         int drId = (Integer)response.getAsNumber("dietRecordId");
+        String username = response.getAsString("username");
+        User user = userService.findUserByUsername(username);
+        String dateString = response.getAsString("date");
+        LocalDate date = LocalDate.parse(dateString);
+
+
         if(dietRecordService.deleteDietRecordById(drId)){
+            double newCalTotal = dietRecordService.getTotalCaloriesByUserIdAndDate(user.getId(), date);
+            HealthRecord hr = hrService.createHealthRecordIfAbsent(user.getId(), date);
+            hr.setCalIntake(newCalTotal);
+            hrService.saveHealthRecord(hr);
+
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

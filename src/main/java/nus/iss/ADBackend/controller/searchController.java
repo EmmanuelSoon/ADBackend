@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,23 +32,15 @@ public class searchController {
     @RequestMapping("/ingredients")
     public List<Ingredient> getSearchResults(@RequestBody JSONObject response) throws IOException, ParseException{
         String search = response.getAsString("query");
-        List<Ingredient> iList;
-        try{
-            double calSearch = Double.parseDouble(search);
-            iList = ingredientService.findIngredientsWithCaloriesLowerThan(calSearch);
-        }
-        catch (NumberFormatException numEx){
-            iList = ingredientService.findSimilarIngredients(search);
-        }
-
-        return iList;
+        double maxCal = response.getAsNumber("maxCal").doubleValue();
+        List<Ingredient> iList = ingredientService.findSimilarIngredients(search);
+        return iList.stream().filter(ingredient -> ingredient.getCalorie() <= maxCal).collect(Collectors.toList());
     }
 
     @RequestMapping("/recipes")
     public List<Recipe> getRecipeResults(@RequestBody JSONObject response) throws IOException, ParseException{
         String search = response.getAsString("query");
         List<Recipe> rList;
-        
         rList = recipeService.findAllRecipesBySearch(search);
 
         return rList;
