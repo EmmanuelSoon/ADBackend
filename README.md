@@ -18,29 +18,26 @@
   - [Stopping MySQL server on Linux and Windows](https://www.tutorialspoint.com/starting-and-stopping-mysql-server)
   - [Stopping MySQL server on MacOS](https://wpbeaches.com/restart-start-stop-mysql-server-from-command-line-macos-linux/) or you may stop MySQL through (System Preference -> MySQL -> Stop MySQL Server)
 
-## Windows (to be updated)
 
-> insert procedure here
-
-
-## MacOS (Intel/M1) & Linux (Ubuntu)
+## Running procedure
+Running procedure for Windows, MacOS (Intel/M1) & Linux (Ubuntu) are the same.
 Using Terminal, enter ADBackend file direction. Ensure that **docker-compose.yml** file is in the directory. You may use command 'ls' to verify.
-```
+```bash
   ls
 ```
 
 #### Pulling docker image and running container with docker compose
-```
+```bash
   docker compose up
 ```
 
 #### Verify if the containers are running
-```
+```bash
   docker ps -a
 ```
 
 #### Stopping docker containers (ensure you are in the same directory)
-```
+```bash
   docker compose down
 ```
 
@@ -68,5 +65,18 @@ public class Constants {
 | `host`    | `string` | Your machine's IPv4 address. |
 
 3. Run android application.
+
+## React Web Application
+In your browser, enter your host ip with the stated port number. (e.g. 192:XX:XX:X:3000)
+
+- To access **user** react application:
+> ${host}:3000 
+
+- To access **admin** react application:
+> ${host}:3001
+
+| Parameter | Type     | Description                  |
+| :-------- | :------- | :-------------------------   |
+| `host`    | `string` | Your machine's IPv4 address. |
 
 
