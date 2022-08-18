@@ -67,7 +67,7 @@ public class Constants {
 3. Run android application.
 
 ## React Web Application
-In your browser, enter your host ip with the stated port number. (e.g. 192:XX:XX:X:3000)
+In your browser, enter your host ip with the stated port number. (e.g. 192.XX.XX.X:3000)
 
 - To access **user** react application:
 > ${host}:3000 
