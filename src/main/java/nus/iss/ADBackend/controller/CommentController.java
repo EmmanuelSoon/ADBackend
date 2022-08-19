@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @RestController
@@ -40,7 +41,8 @@ public class CommentController {
         }
         String content = commentForm.getContent();
         double rating = commentForm.getRating();
-        Comment comment = new Comment(rating, content, u, LocalDateTime.now(), recipe);
+
+        Comment comment = new Comment(rating, content, u, LocalDateTime.now(ZoneId.of("Asia/Singapore")), recipe);
         commentService.createComment(comment);
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
