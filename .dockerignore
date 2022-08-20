@@ -1,0 +1,6 @@
+README.md
+instructions.txt
+.gitignore
+Dockerfile
+docker-compose.yml
+FlaskModel

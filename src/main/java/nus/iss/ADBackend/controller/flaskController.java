@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,10 +36,10 @@ public class flaskController {
 		String outputResponse = getPrediction(imgByteArray);
 		String predictedItemName = stringCleaner(outputResponse);
 		predictedItemName = predictedItemName.replace("mandarin", "orange");
-		if(predictedItemName.equals("sweet potato leaf raw")){
+		if (predictedItemName.equals("sweet potato leaf raw")) {
 			predictedItemName = predictedItemName.replace(" raw", "");
 		}
-		
+
 		System.out.println(predictedItemName);
 		Ingredient ingredient = ingredientService.findIngredientByName(predictedItemName);
 		// System.out.println(ingredient.getName());
@@ -53,20 +52,19 @@ public class flaskController {
 	}
 
 	@RequestMapping("/oopsModelGotItWrong")
-	public ResponseEntity uploadingActualResultsFromUser(@RequestBody JSONObject response){
+	public ResponseEntity uploadingActualResultsFromUser(@RequestBody JSONObject response) {
 		try {
 			String predicted = response.getAsString("predicted");
 			String actual = response.getAsString("actual");
 			String photoString = response.getAsString("photoString");
-			// Save object into DB 
+			// Save object into DB
 			// System.out.println("predicted: " + predicted);
 			// System.out.println("actual: " + actual);
 			wrongPredictionService.createWrongPrediction(actual, predicted, photoString);
-			
+
 			return new ResponseEntity<>(null, HttpStatus.ACCEPTED);
 
-		}
-		catch (Exception ex){
+		} catch (Exception ex) {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -77,7 +75,7 @@ public class flaskController {
 		String outputResponse = "";
 
 		try {
-			URL url = new URL("http://127.0.0.1:5000/predict_api");
+			URL url = new URL("http://adbackend-ad-ml-model-1:5000/predict_api");
 
 			conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
